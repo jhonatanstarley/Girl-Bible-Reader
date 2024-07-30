@@ -252,7 +252,21 @@
         './img/4.png',
         './img/5.png',
         './img/6.png',
-        './img/7.png'
+        './img/7.png',
+        '1.png', // Substitua pelos nomes dos arquivos de imagem
+        '2.png',
+        '3.png',
+        '4.png',
+        '5.png',
+        '6.png',
+        '7.png',
+        '.../img/1.png', // Substitua pelos nomes dos arquivos de imagem
+        '../img/2.png',
+        '../img/3.png',
+        '../img/4.png',
+        '../img/5.png',
+        '../img/6.png',
+        '../img/7.png',
       ];
 
       let currentIndex = 0;
@@ -264,7 +278,7 @@
       }
 
       // Muda a imagem a cada 10 segundos (10000 milissegundos)
-      setInterval(changeImage, 5000);
+      setInterval(changeImage, 1000);
 
       // Inicia com a primeira imagem
       window.onload = changeImage;

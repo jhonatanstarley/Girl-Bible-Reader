@@ -3,7 +3,7 @@
     "public": true,
     "builds": [
       { "src": "index.html", "use": "@vercel/static" },
-      { "src": "*", "use": "@vercel/static" }
+      { "src": "img/*", "use": "@vercel/static" }
     ],
     "routes": [
       { "src": "/(.*)", "dest": "/index.html" }
