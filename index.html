@@ -56,6 +56,23 @@
         width: 100%;
         margin-left: 5px;
       }
+
+      .floating-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      font-size: 24px;
+      text-align: center;
+      line-height: 60px;
+      cursor: pointer;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
     </style>
   </head>
 
@@ -64,6 +81,7 @@
       <div class="header">
         <h1 class="text-center">Programação de Leitura da Bíblia em 1 Ano</h1>
         <h3 class="text-right" id="username"></h3>
+        <button class="floating-button" onclick="changeUserName()">✎</button>
         <div class="volume" id="volume" name="volume">
           <label for="volumeControl">🔊:</label>
           <input type="range" id="volumeControl" min="0" max="1" step="0.1" value="0.5">
@@ -264,7 +282,7 @@
       }
 
       // Muda a imagem a cada 10 segundos (10000 milissegundos)
-      setInterval(changeImage, 5000);
+      setInterval(changeImage, 8000);
 
       // Inicia com a primeira imagem
       window.onload = changeImage;
@@ -282,9 +300,22 @@
     return name || 'Visitante';
   }
 
-  // Definindo o nome no h3
-  document.getElementById('username').innerText = getUserName();
+  // Função para definir o nome do usuário
+  function setUserName(name) {
+    localStorage.setItem('username', name);
+    document.getElementById('username').innerText = name;
+  }
 
+  // Função para trocar o nome do usuário
+  function changeUserName() {
+    const newName = prompt('Por favor, insira seu novo nome:');
+    if (newName) {
+      setUserName(newName);
+    }
+  }
+
+  // Inicializa o nome do usuário no carregamento da página
+  document.getElementById('username').innerText = getUserName();
 </script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
