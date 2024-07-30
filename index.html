@@ -261,32 +261,41 @@
         });
       }
     </script>
-    <script>
-      // Array de caminhos das imagens
-      const images = [
-        'https://imgur.com/UXTc8QC.png', // Substitua pelos nomes dos arquivos de imagem
-        'https://imgur.com/lx45Rr3.png',
-        'https://imgur.com/qi5YZoR.png',
-        'https://imgur.com/6JeQ6Ba.png',
-        'https://imgur.com/FTBKhhH.png',
-        'https://imgur.com/5ihMPVd.png',
-        'https://imgur.com/OFMLTmD.png',
-      ];
+<script>
+  // Array de caminhos das imagens e cores
+  const images = [
+      ['https://imgur.com/UXTc8QC.png', '#faa17e'], 
+      ['https://imgur.com/lx45Rr3.png', '#efd9b4'],
+      ['https://imgur.com/qi5YZoR.png', '#f3d0b7'],
+      ['https://imgur.com/6JeQ6Ba.png', '#6dbfc0'],
+      ['https://imgur.com/FTBKhhH.png', '#f49b7c'],
+      ['https://imgur.com/5ihMPVd.png', '#fbca75'],
+      ['https://imgur.com/OFMLTmD.png', '#b4f6e5']
+  ];
 
-      let currentIndex = 0;
+  let currentIndex = 0;
 
-      function changeImage() {
-        const header = document.querySelector('.header');
-        header.style.backgroundImage = `url('${images[currentIndex]}')`;
-        currentIndex = (currentIndex + 1) % images.length;
-      }
+  function changeImage() {
+    const header = document.querySelector('.header');
+    const body = document.body;
 
-      // Muda a imagem a cada 10 segundos (10000 milissegundos)
-      setInterval(changeImage, 10000);
+    // Atualiza a imagem de fundo do header
+    header.style.backgroundImage = `url('${images[currentIndex][0]}')`;
 
-      // Inicia com a primeira imagem
-      window.onload = changeImage;
+    // Atualiza a cor de fundo do body
+    body.style.backgroundColor = images[currentIndex][1];
+
+    // Atualiza o índice para a próxima imagem/cor
+    currentIndex = (currentIndex + 1) % images.length;
+  }
+
+  // Muda a imagem a cada 10 segundos (10000 milissegundos)
+  setInterval(changeImage, 10000);
+
+  // Inicia com a primeira imagem
+  window.onload = changeImage;
 </script>
+
 <script>
   // Função para obter o nome do usuário
   function getUserName() {
