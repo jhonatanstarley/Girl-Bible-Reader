@@ -14,7 +14,7 @@
       },
       {
         "src": "img/(.*)",
-        "use": "img/"
+        "use": "@vercel/static"
       }
 
     ]
