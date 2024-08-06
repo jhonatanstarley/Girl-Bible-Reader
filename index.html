@@ -111,6 +111,16 @@
           uma visão cronológica geral do desenvolvimento da congregação cristã.
         </li>
       </ul>
+      <hr></hr>
+            <!-- File upload for progress -->
+<div class="form-group">
+  <label for="uploadProgress" class="font-weight-bold">Carregue seu progresso:</label>
+  <div class="custom-file">
+    <input type="file" class="custom-file-input" id="uploadProgress">
+    <label class="custom-file-label" for="uploadProgress">Escolha um arquivo</label>
+  </div>
+</div>
+            <button class="btn btn-primary btn-download" onclick="downloadProgress()">Baixar Progresso</button>
       <iframe
         id="yt-video"
         width="1189"
@@ -165,75 +175,128 @@
       };
 
       document.addEventListener("DOMContentLoaded", () => {
-  const startDateInput = document.getElementById("startDate");
-  const endDateInput = document.getElementById("endDate");
-  const readingPlan = document.getElementById("reading-plan");
+        const startDateInput = document.getElementById("startDate");
+        const endDateInput = document.getElementById("endDate");
+        const readingPlan = document.getElementById("reading-plan");
 
-  // Carregar data de início do localStorage
-  const savedStartDate = localStorage.getItem("startDate");
-  if (savedStartDate) {
-    startDateInput.value = savedStartDate;
-    const startDate = new Date(savedStartDate + "T00:00:00");
-    const endDate = new Date(startDate);
-    endDate.setDate(endDate.getDate() + 364);
-    endDateInput.value = endDate.toISOString().split("T")[0];
-    generateReadingPlan(startDate);
-  }
+        // Carregar data de início do localStorage
+        const savedStartDate = localStorage.getItem("startDate");
+        if (savedStartDate) {
+          startDateInput.value = savedStartDate;
+          const startDate = new Date(savedStartDate + "T00:00:00");
+          const endDate = new Date(startDate);
+          endDate.setDate(endDate.getDate() + 364);
+          endDateInput.value = endDate.toISOString().split("T")[0];
+          generateReadingPlan(startDate);
+        }
 
-  startDateInput.addEventListener("change", () => {
-    const startDate = new Date(startDateInput.value + "T00:00:00");
-    if (isNaN(startDate)) return; // Verifica se a data é válida
+        startDateInput.addEventListener("change", () => {
+          const startDate = new Date(startDateInput.value + "T00:00:00");
+          if (isNaN(startDate)) return; // Verifica se a data é válida
 
-    // Salvar data de início no localStorage
-    localStorage.setItem("startDate", startDateInput.value);
-    const endDate = new Date(startDate);
-    endDate.setDate(endDate.getDate() + 364);
-    endDateInput.value = endDate.toISOString().split("T")[0];
-    generateReadingPlan(startDate);
-  });
+          // Salvar data de início no localStorage
+          localStorage.setItem("startDate", startDateInput.value);
+          const endDate = new Date(startDate);
+          endDate.setDate(endDate.getDate() + 364);
+          endDateInput.value = endDate.toISOString().split("T")[0];
+          generateReadingPlan(startDate);
+        });
 
-  function generateReadingPlan(startDate) {
-    readingPlan.innerHTML = "";
-    let dayCount = 0;
-    for (const category in readingPlanData) {
-      const categoryHeader = document.createElement("h4");
-      categoryHeader.textContent = category;
-      categoryHeader.className = "mt-4";
-      readingPlan.appendChild(categoryHeader);
-      readingPlanData[category].forEach((chapters) => {
-        appendReadingDay(startDate, dayCount, chapters);
-        dayCount++;
+        function generateReadingPlan(startDate) {
+          readingPlan.innerHTML = "";
+          let dayCount = 0;
+          for (const category in readingPlanData) {
+            const categoryHeader = document.createElement("h4");
+            categoryHeader.textContent = category;
+            categoryHeader.className = "mt-4";
+            readingPlan.appendChild(categoryHeader);
+            readingPlanData[category].forEach((chapters) => {
+              appendReadingDay(startDate, dayCount, chapters);
+              dayCount++;
+            });
+          }
+        }
+
+        function appendReadingDay(startDate, dayCount, chapters) {
+          const currentDate = new Date(startDate);
+          currentDate.setDate(currentDate.getDate() + dayCount);
+          const formattedDate = currentDate.toLocaleDateString("pt-BR", {
+            timeZone: "UTC",
+          });
+          const listItem = document.createElement("a");
+          listItem.href = "#";
+          listItem.className = "list-group-item list-group-item-action";
+          listItem.dataset.day = dayCount;
+          const checkbox = document.createElement("input");
+          checkbox.type = "checkbox";
+          checkbox.className = "mr-2";
+          checkbox.checked = localStorage.getItem(`day${dayCount}`) === "true";
+          checkbox.addEventListener("change", () => {
+            localStorage.setItem(`day${dayCount}`, checkbox.checked);
+            listItem.classList.toggle("completed", checkbox.checked);
+          });
+          listItem.appendChild(checkbox);
+          listItem.appendChild(document.createTextNode(`${formattedDate}: ${chapters.join(", ")}`));
+          if (checkbox.checked) {
+            listItem.classList.add("completed");
+          }
+          readingPlan.appendChild(listItem);
+        }
+
+        const uploadInput = document.getElementById("uploadProgress");
+        uploadInput.addEventListener("change", (event) => {
+          const file = event.target.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+              const data = JSON.parse(e.target.result);
+              Object.keys(data).forEach(key => {
+                localStorage.setItem(key, data[key]);
+                if (key.startsWith('day')) {
+                  const dayIndex = parseInt(key.replace('day', ''));
+                  const checkbox = document.querySelector(`.list-group-item[data-day="${dayIndex}"] input`);
+                  if (checkbox) {
+                    checkbox.checked = data[key] === "true";
+                    checkbox.dispatchEvent(new Event('change')); // Atualiza a classe de completado
+                  }
+                }
+              });
+              // Atualiza a data de início se disponível
+              const savedStartDate = localStorage.getItem("startDate");
+              if (savedStartDate) {
+                const startDate = new Date(savedStartDate + "T00:00:00");
+                if (!isNaN(startDate)) {
+                  generateReadingPlan(startDate);
+                }
+              }
+              // Atualiza a página para refletir as mudanças
+              location.reload();
+            };
+            reader.readAsText(file);
+          }
+        });
       });
-    }
-  }
 
-  function appendReadingDay(startDate, dayCount, chapters) {
-    const currentDate = new Date(startDate);
-    currentDate.setDate(currentDate.getDate() + dayCount);
-    const formattedDate = currentDate.toLocaleDateString("pt-BR", {
-      timeZone: "UTC",
-    });
-    const listItem = document.createElement("a");
-    listItem.href = "#";
-    listItem.className = "list-group-item list-group-item-action";
-    listItem.dataset.day = dayCount;
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.className = "mr-2";
-    checkbox.checked = localStorage.getItem(`day${dayCount}`) === "true";
-    checkbox.addEventListener("change", () => {
-      localStorage.setItem(`day${dayCount}`, checkbox.checked);
-      listItem.classList.toggle("completed", checkbox.checked);
-    });
-    listItem.appendChild(checkbox);
-    listItem.appendChild(document.createTextNode(`${formattedDate}: ${chapters.join(", ")}`));
-    if (checkbox.checked) {
-      listItem.classList.add("completed");
-    }
-    readingPlan.appendChild(listItem);
-  }
-});
+      function downloadProgress() {
+          const data = JSON.stringify(localStorage);
+          const blob = new Blob([data], { type: "application/json" });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          const name = document.getElementById("username").textContent;
+          a.href = url;
+          a.download = `progresso_leitura_${name}.json`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        }
 
+      function changeUserName() {
+        const username = prompt("Digite o nome do usuário:");
+        if (username) {
+          document.getElementById("username").textContent = username;
+          localStorage.setItem("username", username);
+        }
+      }
     </script>
     <script>
       // Carrega a API do IFrame do YouTube de forma assíncrona
@@ -261,39 +324,39 @@
         });
       }
     </script>
-<script>
-  // Array de caminhos das imagens e cores
-  const images = [
-      ['https://imgur.com/UXTc8QC.png', '#faa17e'], 
-      ['https://imgur.com/lx45Rr3.png', '#efd9b4'],
-      ['https://imgur.com/qi5YZoR.png', '#f3d0b7'],
-      ['https://imgur.com/6JeQ6Ba.png', '#6dbfc0'],
-      ['https://imgur.com/FTBKhhH.png', '#f49b7c'],
-      ['https://imgur.com/5ihMPVd.png', '#fbca75'],
-      ['https://imgur.com/OFMLTmD.png', '#b4f6e5']
-  ];
+    <script>
+      // Array de caminhos das imagens e cores
+      const images = [
+          ['https://imgur.com/UXTc8QC.png', '#faa17e'], 
+          ['https://imgur.com/lx45Rr3.png', '#efd9b4'],
+          ['https://imgur.com/qi5YZoR.png', '#f3d0b7'],
+          ['https://imgur.com/6JeQ6Ba.png', '#6dbfc0'],
+          ['https://imgur.com/FTBKhhH.png', '#f49b7c'],
+          ['https://imgur.com/5ihMPVd.png', '#fbca75'],
+          ['https://imgur.com/OFMLTmD.png', '#b4f6e5']
+      ];
 
-  let currentIndex = 0;
+      let currentIndex = 0;
 
-  function changeImage() {
-    const header = document.querySelector('.header');
-    const body = document.body;
+      function changeImage() {
+        const header = document.querySelector('.header');
+        const body = document.body;
 
-    // Atualiza a imagem de fundo do header
-    header.style.backgroundImage = `url('${images[currentIndex][0]}')`;
+        // Atualiza a imagem de fundo do header
+        header.style.backgroundImage = `url('${images[currentIndex][0]}')`;
 
-    // Atualiza a cor de fundo do body
-    body.style.backgroundColor = images[currentIndex][1];
+        // Atualiza a cor de fundo do body
+        body.style.backgroundColor = images[currentIndex][1];
 
-    // Atualiza o índice para a próxima imagem/cor
-    currentIndex = (currentIndex + 1) % images.length;
-  }
+        // Atualiza o índice para a próxima imagem/cor
+        currentIndex = (currentIndex + 1) % images.length;
+      }
 
-  // Muda a imagem a cada 10 segundos (10000 milissegundos)
-  setInterval(changeImage, 10000);
+      // Muda a imagem a cada 10 segundos (10000 milissegundos)
+      setInterval(changeImage, 10000);
 
-  // Inicia com a primeira imagem
-  window.onload = changeImage;
+      // Inicia com a primeira imagem
+      window.onload = changeImage;
 </script>
 
 <script>
