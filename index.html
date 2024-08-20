@@ -9,6 +9,11 @@
       rel="stylesheet"
     />
     <style>
+      body {
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+      }
+
       .header {
         position: relative;
         width: 100%;
@@ -73,6 +78,20 @@
       cursor: pointer;
       box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     }
+
+    /* Ajustes de compatibilidade para cursor */
+      .floating-button,
+      .volume {
+        cursor: -webkit-grab;
+        cursor: grab;
+      }
+    
+      .floating-button:active,
+      .volume:active {
+        cursor: -webkit-grabbing;
+        cursor: grabbing;
+      }
+
     </style>
   </head>
 
@@ -81,20 +100,20 @@
       <div class="header">
         <h1 class="text-center">Programação de Leitura da Bíblia em 1 Ano</h1>
         <h3 class="text-right" id="username"></h3>
-        <button type="button" class="floating-button" onclick="changeUserName()">✎</button>
+        <button type="button" id="button" name="button" class="floating-button" onclick="changeUserName()">✎</button>
         <div class="volume" id="volume" name="volume">
           <label for="volumeControl">🔊:</label>
-          <input type="range" id="volumeControl" min="0" max="1" step="0.1" value="0.5">
+          <input type="range" id="volumeControl" name="volumeControl" min="0" max="1" step="0.1" value="0.5">
         </div>
       </div>
       <br><hr></hr>
       <div class="form-group">
         <label for="startDate">Data de Início:</label>
-        <input type="date" id="startDate" class="form-control" />
+        <input type="date" id="startDate" name="startDate" class="form-control" />
       </div>
       <div class="form-group">
         <label for="endDate">Data de Término:</label>
-        <input type="date" id="endDate" class="form-control" disabled />
+        <input type="date" id="endDate" name="endDate" class="form-control" disabled />
       </div>
       <p>
         <strong>INSTRUÇÕES:</strong> Preencha as datas em que você pretende ler
@@ -117,7 +136,7 @@
   <label for="uploadProgress" class="font-weight-bold">Carregue seu progresso:</label>
   <div class="custom-file">
     <label class="custom-file-label" for="uploadProgress">Escolha um arquivo</label>
-    <input type="file" class="custom-file-input" id="uploadProgress">
+    <input type="file" class="custom-file-input" id="uploadProgress" name="uploadProgress">
   </div>
 </div>
             <button class="btn btn-primary btn-download" onclick="downloadProgress()">Baixar Progresso</button>
