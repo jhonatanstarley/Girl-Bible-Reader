@@ -81,7 +81,7 @@
       <div class="header">
         <h1 class="text-center">Programação de Leitura da Bíblia em 1 Ano</h1>
         <h3 class="text-right" id="username"></h3>
-        <button class="floating-button" onclick="changeUserName()">✎</button>
+        <button type="button" class="floating-button" onclick="changeUserName()">✎</button>
         <div class="volume" id="volume" name="volume">
           <label for="volumeControl">🔊:</label>
           <input type="range" id="volumeControl" min="0" max="1" step="0.1" value="0.5">
@@ -116,8 +116,8 @@
 <div class="form-group">
   <label for="uploadProgress" class="font-weight-bold">Carregue seu progresso:</label>
   <div class="custom-file">
-    <input type="file" class="custom-file-input" id="uploadProgress">
     <label class="custom-file-label" for="uploadProgress">Escolha um arquivo</label>
+    <input type="file" class="custom-file-input" id="uploadProgress">
   </div>
 </div>
             <button class="btn btn-primary btn-download" onclick="downloadProgress()">Baixar Progresso</button>
