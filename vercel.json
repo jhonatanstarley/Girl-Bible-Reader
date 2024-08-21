@@ -5,9 +5,17 @@
     {
       "src": "index.html",
       "use": "@vercel/static"
+    },
+    {
+      "src": "img/*",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
+    {
+      "src": "/img/(.*)",
+      "dest": "/img/$1"
+    },
     {
       "src": "/(.*)",
       "dest": "/index.html"
