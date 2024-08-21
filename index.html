@@ -355,9 +355,38 @@
       //    ['https://imgur.com/OFMLTmD.png', '#b4f6e5']
       //];
       //const urlImg = 'https://raw.githubusercontent.com/jhonatanstarley/Girl-Bible-Reader/f2a9a22ba96425ec3d12302a41927f45efdea5ee/img';
-      const urlImg = 'https://raw.githubusercontent.com/jhonatanstarley/Girl-Bible-Reader/main/img';
+      //const urlImg = 'https://raw.githubusercontent.com/jhonatanstarley/Girl-Bible-Reader/main/img';
+      //const images = [
+      //    [`${urlImg}/1.png`, '#faa17e'],
+      //    [`${urlImg}/9.png`, '#929594'],
+      //    [`${urlImg}/8.png`, '#689279'],
+      //    [`${urlImg}/2.png`, '#efd9b4'],
+      //    [`${urlImg}/10.png`, '#688590'],
+      //    [`${urlImg}/19.png`, '#87a28b'],
+      //    [`${urlImg}/3.png`, '#f3d0b7'],
+      //    [`${urlImg}/11.png`, '#73a1b6'],
+      //    [`${urlImg}/20.png`, '#6f938c'],
+      //    [`${urlImg}/4.png`, '#6dbfc0'],
+      //    [`${urlImg}/12.png`, '#798084'],
+      //    [`${urlImg}/21.png`, '#668d91'],
+      //    [`${urlImg}/5.png`, '#f49b7c'],
+      //    [`${urlImg}/13.png`, '#808a7b'],
+      //    [`${urlImg}/22.png`, '#63837a'],
+      //    [`${urlImg}/6.png`, '#fbca75'],
+      //    [`${urlImg}/14.png`, '#808a7b'],
+      //    [`${urlImg}/23.png`, '#849073'],
+      //    [`${urlImg}/7.png`, '#b4f6e5'],
+      //    [`${urlImg}/15.png`, '#808a7b'],
+      //    [`${urlImg}/24.png`, '#8b9286'],
+      //    [`${urlImg}/16.png`, '#769992'],
+      //    [`${urlImg}/25.png`, '#739285'],
+      //    [`${urlImg}/17.png`, '#698691'],
+      //    [`${urlImg}/18.png`, '#6c99ab']
+      //];
+
+      const urlImg = 'img';
       const images = [
-          [`${urlImg}/1.png`, '#faa17e'], 
+          [`${urlImg}/1.png`, '#faa17e'],
           [`${urlImg}/9.png`, '#929594'],
           [`${urlImg}/8.png`, '#689279'],
           [`${urlImg}/2.png`, '#efd9b4'],
@@ -391,7 +420,8 @@
         const body = document.body;
 
         // Atualiza a imagem de fundo do header
-        header.style.backgroundImage = `url('${images[currentIndex][0]}')`;
+        //header.style.backgroundImage = `url('${images[currentIndex][0]}')`;
+        header.src = `${images[currentIndex][0]}`;
 
         // Atualiza a cor de fundo do body
         body.style.backgroundColor = images[currentIndex][1];
