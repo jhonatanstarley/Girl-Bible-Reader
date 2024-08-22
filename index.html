@@ -110,6 +110,16 @@
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
         text-decoration: none; /* Remove underline */
       }
+
+      .progress {
+        margin-top: 20px;
+      }
+
+      .congrats-message {
+        margin-top: 10px;
+        color: green;
+        font-weight: bold;
+      }
     </style>
   </head>
 
@@ -132,12 +142,22 @@
         </div>
       </div>
       <br><hr></hr>
+      <!-- Progress Bar and Statistics -->
+      <div class="progress">
+        <div class="progress-bar" id="progressBar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+      </div>
+      <p><strong>Dias Restantes:</strong> <span id="daysRemaining">0</span></p>
+      <p><strong>Dias Atrasados:</strong> <span id="daysOverdue">0</span></p>
+      <p class="congrats-message" id="congratsMessage" style="display: none;"><strong>Parabéns! Sua leitura está em dia!</strong></p>
+      <hr></hr>
+	  <div name="dailyText" id="dailyText"><strong>Leia o texto diário clicando <a href="https://wol.jw.org/pt/wol/h/r5/lp-t" target="_blank">aqui!<a></strong></iframe></div>
+	  <hr></hr>
       <div class="form-group">
-        <label for="startDate">Data de Início:</label>
+        <label for="startDate"><strong>Data de Início:</strong></label>
         <input type="date" id="startDate" name="startDate" class="form-control" />
       </div>
       <div class="form-group">
-        <label for="endDate">Data de Término:</label>
+        <label for="endDate"><strong>Data de Término:</strong></label>
         <input type="date" id="endDate" name="endDate" class="form-control" disabled />
       </div>
       <p>
@@ -222,6 +242,15 @@
         const startDateInput = document.getElementById("startDate");
         const endDateInput = document.getElementById("endDate");
         const readingPlan = document.getElementById("reading-plan");
+		const progressBar = document.getElementById("progressBar");
+        const daysRemainingText = document.getElementById("daysRemaining");
+        const daysOverdueText = document.getElementById("daysOverdue");
+        const congratsMessage = document.getElementById("congratsMessage");
+
+        let totalDays = 0;
+        let completedDays = 0;
+        let overdueDays = 0;
+        let daysRemaining = 0;
 
         // Carregar data de início do localStorage
         const savedStartDate = localStorage.getItem("startDate");
@@ -232,6 +261,7 @@
           endDate.setDate(endDate.getDate() + 364);
           endDateInput.value = endDate.toISOString().split("T")[0];
           generateReadingPlan(startDate);
+          updateProgress();
         }
 
         startDateInput.addEventListener("change", () => {
@@ -244,10 +274,16 @@
           endDate.setDate(endDate.getDate() + 364);
           endDateInput.value = endDate.toISOString().split("T")[0];
           generateReadingPlan(startDate);
+          updateProgress();
         });
 
         function generateReadingPlan(startDate) {
           readingPlan.innerHTML = "";
+          totalDays = 0;
+          completedDays = 0;
+          daysRemaining = 0;
+          overdueDays = 0;
+
           let dayCount = 0;
           for (const category in readingPlanData) {
             const categoryHeader = document.createElement("h4");
@@ -257,6 +293,7 @@
             readingPlanData[category].forEach((chapters) => {
               appendReadingDay(startDate, dayCount, chapters);
               dayCount++;
+              totalDays++;
             });
           }
         }
@@ -278,13 +315,61 @@
           checkbox.addEventListener("change", () => {
             localStorage.setItem(`day${dayCount}`, checkbox.checked);
             listItem.classList.toggle("completed", checkbox.checked);
+			updateProgress();
           });
           listItem.appendChild(checkbox);
           listItem.appendChild(document.createTextNode(`${formattedDate}: ${chapters.join(", ")}`));
           if (checkbox.checked) {
             listItem.classList.add("completed");
+			completedDays++;
           }
+		  
+          const today = new Date();
+          if (currentDate < today && !checkbox.checked) {
+            overdueDays++;
+          }
+
           readingPlan.appendChild(listItem);
+        }
+		
+		function updateProgress() {
+          completedDays = 0;
+          overdueDays = 0;
+          const today = new Date();
+		  today.setHours(0, 0, 0, 0);  // Ajusta para garantir que só compare o dia, não a hora.
+
+          for (let i = 0; i < totalDays; i++) {
+            const checkboxChecked = localStorage.getItem(`day${i}`) === "true";
+            const dayDate = new Date(startDateInput.value);
+            dayDate.setDate(dayDate.getDate() + i);
+			dayDate.setHours(0, 0, 0, 0);  // Ajusta a data do dia também.
+
+            if (checkboxChecked) {
+              completedDays++;
+            } else if (dayDate < today) {
+              overdueDays++;
+            }
+          }
+
+          const progressPercent = Math.floor((completedDays / totalDays) * 100);
+          progressBar.style.width = `${progressPercent}%`;
+          progressBar.setAttribute("aria-valuenow", progressPercent);
+          progressBar.textContent = `${progressPercent}%`;
+
+          // Atualiza os dias restantes
+          const endDate = new Date(endDateInput.value);
+          const timeDiff = endDate.getTime() - today.getTime();
+          daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+          daysRemainingText.textContent = daysRemaining > 0 ? daysRemaining : 0;
+          daysOverdueText.textContent = overdueDays;
+
+          // Mensagem de parabéns
+          if (overdueDays === 0) {
+            congratsMessage.style.display = "block";
+          } else {
+            congratsMessage.style.display = "none";
+          }
         }
 
         const uploadInput = document.getElementById("uploadProgress");
