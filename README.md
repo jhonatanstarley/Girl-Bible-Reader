@@ -1,5 +1,3 @@
-Aqui está um exemplo de README para o seu projeto no GitHub:
-
 ---
 
 # Plano de Leitura da Bíblia em 1 Ano
@@ -55,5 +53,3 @@ Este projeto está licenciado sob a [MIT License](LICENSE).
 Caso tenha dúvidas ou sugestões, entre em contato comigo pelo WhatsApp através do botão disponível na aplicação.
 
 ---
-
-Esse modelo pode ser adaptado de acordo com suas necessidades específicas. Certifique-se de incluir capturas de tela do aplicativo e um link correto para o arquivo de licença, se necessário.
