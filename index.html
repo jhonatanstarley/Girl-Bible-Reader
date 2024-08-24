@@ -649,51 +649,48 @@
   function fetchAndExtractContent() {
     var today = new Date();
     var year = today.getFullYear();
-    var month = today.getMonth() + 1; // getMonth() retorna de 0-11, então somamos 1
-    var day = today.getDate();
-
-    // Garantir que o mês e o dia estejam no formato de dois dígitos
-    if (month < 10) month = '0' + month;
-    if (day < 10) day = '0' + day;
+    var month = String(today.getMonth() + 1).padStart(2, '0');
+    var day = String(today.getDate()).padStart(2, '0');
 
     var formattedDate = year + '/' + month + '/' + day;
 
-    var url = "https://cors-anywhere.herokuapp.com/https://wol.jw.org/pt/wol/h/r5/lp-t/" + formattedDate;
+    var url = "https://wol.jw.org/pt/wol/h/r5/lp-t/" + formattedDate;
+    var proxyUrl = `https:https://cors-anywhere.herokuapp.com/${url}`;
 
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", url, true);
+    xhr.open("GET", proxyUrl, true);
     xhr.onreadystatechange = function() {
       if (xhr.readyState === 4 && xhr.status === 200) {
+        var responseJson = JSON.parse(xhr.responseText);
         var tempDiv = document.createElement('div');
-        tempDiv.innerHTML = xhr.responseText;
+        tempDiv.innerHTML = responseJson.contents;
 
         var articleContent = tempDiv.querySelector('.articlePositioner');
         if (articleContent) {
           var fullText = articleContent.innerHTML;
 
-          // Encontrar as ocorrências de "Examine as Escrituras Diariamente — 2024"
           var firstOccurrence = fullText.indexOf("Examine as Escrituras Diariamente — 2024");
           var secondOccurrence = fullText.indexOf("Examine as Escrituras Diariamente — 2024", firstOccurrence + 1);
 
           if (firstOccurrence !== -1 && secondOccurrence !== -1) {
             var extractedContent = fullText.substring(firstOccurrence + 38, secondOccurrence).trim();
-
-            // Remove qualquer número inicial e espaços extras
             extractedContent = extractedContent.replace(/^\s*\d+\s*/, '');
-
-            // Exibir o conteúdo extraído
             document.getElementById('dailyText').innerHTML = extractedContent;
           } else {
-            document.getElementById('dailyText').innerHTML = `<div name="dailyText" id="dailyText"><strong>Leia o texto diário clicando <a href="https://wol.jw.org/pt/wol/h/r5/lp-t" target="_blank">aqui!<a></strong></iframe></div>`;
+            displayFallbackMessage();
           }
         } else {
-          document.getElementById('dailyText').innerHTML = `<div name="dailyText" id="dailyText"><strong>Leia o texto diário clicando <a href="https://wol.jw.org/pt/wol/h/r5/lp-t" target="_blank">aqui!<a></strong></iframe></div>`;
+          displayFallbackMessage();
         }
-      } else if (xhr.readyState === 4 && xhr.status !== 200) {
-        document.getElementById('dailyText').innerHTML = `<div name="dailyText" id="dailyText"><strong>Leia o texto diário clicando <a href="https://wol.jw.org/pt/wol/h/r5/lp-t" target="_blank">aqui!<a></strong></iframe></div>`;
+      } else if (xhr.readyState === 4) {
+        displayFallbackMessage();
       }
     };
     xhr.send();
+  }
+
+  function displayFallbackMessage() {
+    document.getElementById('dailyText').innerHTML = `<strong>Leia o texto diário clicando <a href="https://wol.jw.org/pt/wol/h/r5/lp-t" target="_blank">aqui!<a></strong>`;
   }
 
   fetchAndExtractContent();
