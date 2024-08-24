@@ -9,6 +9,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css">
     <style>
       body {
         -webkit-text-size-adjust: 100%;
@@ -120,6 +121,12 @@
         color: green;
         font-weight: bold;
       }
+
+      #helpButton {
+        bottom: 180px; /* Ajuste a posição para ficar acima do botão do WhatsApp */
+        right: 20px;
+        text-decoration: none; /* Remove underline */
+      }
     </style>
   </head>
 
@@ -136,6 +143,9 @@
         >
           <i class="fab fa-whatsapp"></i>
         </a>
+        <button type="button" id="helpButton" class="floating-button" data-toggle="modal" data-target="#helpModal">
+          <i class="fas fa-question-circle"></i>
+        </button>
         <div class="volume" id="volume" name="volume">
           <label for="volumeControl">🔊:</label>
           <input type="range" id="volumeControl" name="volumeControl" min="0" max="1" step="0.1" value="0.5">
@@ -201,6 +211,36 @@
       </div>
       <br /><br /><br /><br />
     </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="helpModalLabel">Ajuda</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div id="readmeContent" class="markdown-body"></div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+    
+        <script>
+          document.addEventListener("DOMContentLoaded", function() {
+            fetch('https://raw.githubusercontent.com/jhonatanstarley/Girl-Bible-Reader/main/README.md')
+              .then(response => response.text())
+              .then(text => {
+                document.getElementById('readmeContent').textContent = text;
+              });
+          });
+        </script>
     
     <script>
       const readingPlanData = {
