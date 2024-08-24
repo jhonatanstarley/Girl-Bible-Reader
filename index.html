@@ -1,70 +1,70 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Plano de Leitura da Bíblia em 1 Ano</title>
-    <link
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css">
-    <style>
-      body {
-        -webkit-text-size-adjust: 100%;
-        text-size-adjust: 100%;
-      }
 
-      .header {
-        position: relative;
-        width: 100%;
-        height: 387px;
-        overflow: hidden;
-        background-size: cover;
-        background-position: center;
-        text-align: center;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Plano de Leitura da Bíblia em 1 Ano</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
-      .header h1,
-      .header h3 {
-        position: absolute;
-        width: 100%;
-        color: white;
-        text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7);
-      }
+  <style>
+    body {
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
 
-      .header h1 {
-        top: 20px;
-      }
+    .header {
+      position: relative;
+      width: 100%;
+      height: 387px;
+      overflow: hidden;
+      background-size: cover;
+      background-position: center;
+      text-align: center;
+    }
 
-      .header h3 {
-        top: 350px;
-        right: 15px;
-      }
+    .header h1,
+    .header h3 {
+      position: absolute;
+      width: 100%;
+      color: white;
+      text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7);
+    }
 
-      .completed {
-        text-decoration: line-through;
-      }
+    .header h1 {
+      top: 20px;
+    }
 
-      iframe {
-        display: none;
-      }
+    .header h3 {
+      top: 350px;
+      right: 15px;
+    }
 
-      .volume {
-        position: absolute;
-        top: 350px;
-        left: 10px;
-        display: flex;
-        align-items: center;
-      }
+    .completed {
+      text-decoration: line-through;
+    }
 
-      #volumeControl {
-        width: 100%;
-        margin-left: 5px;
-      }
+    iframe {
+      display: none;
+    }
 
-      .floating-button {
+    .volume {
+      position: absolute;
+      top: 350px;
+      left: 10px;
+      display: flex;
+      align-items: center;
+    }
+
+    #volumeControl {
+      width: 100%;
+      margin-left: 5px;
+    }
+
+    .floating-button {
       position: fixed;
       bottom: 20px;
       right: 20px;
@@ -82,513 +82,520 @@
     }
 
     /* Ajustes de compatibilidade para cursor */
-      .floating-button,
-      .volume {
-        cursor: -webkit-grab;
-        cursor: grab;
-      }
-    
-      .floating-button:active,
-      .volume:active {
-        cursor: -webkit-grabbing;
-        cursor: grabbing;
-      }
+    .floating-button,
+    .volume {
+      cursor: -webkit-grab;
+      cursor: grab;
+    }
 
-      .whatsapp-button {
-        position: fixed;
-        bottom: 100px;
-        right: 20px;
-        background-color: #25D366;
-        color: white;
-        border: none;
-        border-radius: 50%;
-        width: 60px;
-        height: 60px;
-        font-size: 24px;
-        text-align: center;
-        line-height: 60px;
-        cursor: pointer;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        text-decoration: none; /* Remove underline */
-      }
+    .floating-button:active,
+    .volume:active {
+      cursor: -webkit-grabbing;
+      cursor: grabbing;
+    }
 
-      .progress {
-        margin-top: 20px;
-      }
+    .whatsapp-button {
+      position: fixed;
+      bottom: 100px;
+      right: 20px;
+      background-color: #25D366;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      font-size: 24px;
+      text-align: center;
+      line-height: 60px;
+      cursor: pointer;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      text-decoration: none;
+      /* Remove underline */
+    }
 
-      .congrats-message {
-        margin-top: 10px;
-        color: green;
-        font-weight: bold;
-      }
+    .progress {
+      margin-top: 20px;
+    }
 
-      #helpButton {
-        bottom: 180px; /* Ajuste a posição para ficar acima do botão do WhatsApp */
-        right: 20px;
-        text-decoration: none; /* Remove underline */
-      }
-    </style>
-  </head>
+    .congrats-message {
+      margin-top: 10px;
+      color: green;
+      font-weight: bold;
+    }
 
-  <body>
-    <div class="container mt-5">
-      <div class="header">
-        <h1 class="text-center">Programação de Leitura da Bíblia em 1 Ano</h1>
-        <h3 class="text-right" id="username"></h3>
-        <button type="button" id="button" name="button" class="floating-button" onclick="changeUserName()">✎</button>
-        <a
-          href="https://api.whatsapp.com/send/?phone=5522997818598&text=Ol%C3%A1%21%0A%0ATenho%20uma%20sugest%C3%A3o%20para%20o%20programa%20de%20leitura%20da%20biblia%20em%201%20ano.%0AT%C3%A1%20podendo%20falar%3F&type=phone_number&app_absent=0"
-          class="whatsapp-button"
-          target="_blank"
-        >
-          <i class="fab fa-whatsapp"></i>
-        </a>
-        <button type="button" id="helpButton" class="floating-button" data-toggle="modal" data-target="#helpModal">
-          <i class="fas fa-question-circle"></i>
-        </button>
-        <div class="volume" id="volume" name="volume">
-          <label for="volumeControl">🔊:</label>
-          <input type="range" id="volumeControl" name="volumeControl" min="0" max="1" step="0.1" value="0.5">
-        </div>
+    #helpButton {
+      bottom: 180px;
+      /* Ajuste a posição para ficar acima do botão do WhatsApp */
+      right: 20px;
+      text-decoration: none;
+      /* Remove underline */
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container mt-5">
+    <div class="header">
+      <h1 class="text-center">Programação de Leitura da Bíblia em 1 Ano</h1>
+      <h3 class="text-right" id="username"></h3>
+      <button type="button" id="button" name="button" class="floating-button" onclick="changeUserName()">✎</button>
+      <a href="https://api.whatsapp.com/send/?phone=5522997818598&text=Ol%C3%A1%21%0A%0ATenho%20uma%20sugest%C3%A3o%20para%20o%20programa%20de%20leitura%20da%20biblia%20em%201%20ano.%0AT%C3%A1%20podendo%20falar%3F&type=phone_number&app_absent=0"
+        class="whatsapp-button" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+      </a>
+      <button type="button" id="helpButton" class="floating-button" data-toggle="modal" data-target="#helpModal">
+        <i class="fas fa-question-circle"></i>
+      </button>
+      <div class="volume" id="volume" name="volume">
+        <label for="volumeControl">🔊:</label>
+        <input type="range" id="volumeControl" name="volumeControl" min="0" max="1" step="0.1" value="0.5">
       </div>
-      <br><hr></hr>
-      <!-- Progress Bar and Statistics -->
-      <div class="progress">
-        <div class="progress-bar" id="progressBar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
-      </div>
-      <p><strong>Dias Restantes:</strong> <span id="daysRemaining">0</span></p>
-      <p><strong>Dias Atrasados:</strong> <span id="daysOverdue">0</span></p>
-      <p class="congrats-message" id="congratsMessage" style="display: none;"><strong>Parabéns! Sua leitura está em dia!</strong></p>
-      <hr></hr>
-	  <div name="dailyText" id="dailyText"><strong>Leia o texto diário clicando <a href="https://wol.jw.org/pt/wol/h/r5/lp-t" target="_blank">aqui!<a></strong></iframe></div>
-	  <hr></hr>
-      <div class="form-group">
-        <label for="startDate"><strong>Data de Início:</strong></label>
-        <input type="date" id="startDate" name="startDate" class="form-control" />
-      </div>
-      <div class="form-group">
-        <label for="endDate"><strong>Data de Término:</strong></label>
-        <input type="date" id="endDate" name="endDate" class="form-control" disabled />
-      </div>
-      <p>
-        <strong>INSTRUÇÕES:</strong> Preencha as datas em que você pretende ler
-        cada grupo de capítulos alistados. Marque no quadrículo quando terminar
-        de ler cada grupo. Você pode ler os livros da Bíblia pela ordem ou por
-        assunto, com base nas categorias indicadas. Se ler um grupo de capítulos
-        por dia, você lerá a Bíblia inteira em um ano.
-      </p>
-      <ul>
-        <li> &#128312; Leia os dias com o marcador <strong>VERMELHO</strong> para
-          ter uma visão histórica geral dos tratos de Deus com os israelitas.
-        </li>
-        <li> &#128309; Leia os dias com o marcador <strong>AZUL</strong> para ter
-          uma visão cronológica geral do desenvolvimento da congregação cristã.
-        </li>
-      </ul>
-      <hr></hr>
-            <!-- File upload for progress -->
-<div class="form-group">
-  <label for="uploadProgress" class="font-weight-bold">Carregue seu progresso:</label>
-  <div class="custom-file">
-    <label class="custom-file-label" for="uploadProgress">Escolha um arquivo</label>
-    <input type="file" class="custom-file-input" id="uploadProgress" name="uploadProgress">
-  </div>
-</div>
-            <button class="btn btn-primary btn-download" onclick="downloadProgress()">Baixar Progresso</button>
-      <iframe
-        id="yt-video"
-        width="1189"
-        height="669"
-        src="https://www.youtube.com/embed/jfKfPfyJRdk?enablejsapi=1&autoplay=1&mute=1"
-        title="lofi hip hop radio 📚 - beats to relax/study to"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerpolicy="strict-origin-when-cross-origin"
-        allowfullscreen
-      ></iframe>
-      <div id="reading-plan" class="list-group mt-4">
-        <!-- Reading plan will be inserted here by JavaScript -->
-      </div>
-      <br /><br /><br /><br />
     </div>
+    <br>
+    <hr>
+    </hr>
+    <!-- Progress Bar and Statistics -->
+    <div class="progress">
+      <div class="progress-bar" id="progressBar" role="progressbar" style="width: 0%;" aria-valuenow="0"
+        aria-valuemin="0" aria-valuemax="100">0%</div>
+    </div>
+    <p><strong>Dias Restantes:</strong> <span id="daysRemaining">0</span></p>
+    <p><strong>Dias Atrasados:</strong> <span id="daysOverdue">0</span></p>
+    <p class="congrats-message" id="congratsMessage" style="display: none;"><strong>Parabéns! Sua leitura está em
+        dia!</strong></p>
+    <hr>
+    </hr>
+    <div name="dailyText" id="dailyText"><strong>Leia o texto diário clicando <a
+          href="https://wol.jw.org/pt/wol/h/r5/lp-t" target="_blank">aqui!<a></strong></iframe></div>
+    <hr>
+    </hr>
+    <div class="form-group">
+      <label for="startDate"><strong>Data de Início:</strong></label>
+      <input type="date" id="startDate" name="startDate" class="form-control" />
+    </div>
+    <div class="form-group">
+      <label for="endDate"><strong>Data de Término:</strong></label>
+      <input type="date" id="endDate" name="endDate" class="form-control" disabled />
+    </div>
+    <p>
+      <strong>INSTRUÇÕES:</strong> Preencha as datas em que você pretende ler
+      cada grupo de capítulos alistados. Marque no quadrículo quando terminar
+      de ler cada grupo. Você pode ler os livros da Bíblia pela ordem ou por
+      assunto, com base nas categorias indicadas. Se ler um grupo de capítulos
+      por dia, você lerá a Bíblia inteira em um ano.
+    </p>
+    <ul>
+      <li> &#128312; Leia os dias com o marcador <strong>VERMELHO</strong> para
+        ter uma visão histórica geral dos tratos de Deus com os israelitas.
+      </li>
+      <li> &#128309; Leia os dias com o marcador <strong>AZUL</strong> para ter
+        uma visão cronológica geral do desenvolvimento da congregação cristã.
+      </li>
+    </ul>
+    <hr>
+    </hr>
+    <!-- File upload for progress -->
+    <div class="form-group">
+      <label for="uploadProgress" class="font-weight-bold">Carregue seu progresso:</label>
+      <div class="custom-file">
+        <label class="custom-file-label" for="uploadProgress">Escolha um arquivo</label>
+        <input type="file" class="custom-file-input" id="uploadProgress" name="uploadProgress">
+      </div>
+    </div>
+    <button class="btn btn-primary btn-download" onclick="downloadProgress()">Baixar Progresso</button>
+    <iframe id="yt-video" width="1189" height="669"
+      src="https://www.youtube.com/embed/jfKfPfyJRdk?enablejsapi=1&autoplay=1&mute=1"
+      title="lofi hip hop radio 📚 - beats to relax/study to" frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    <div id="reading-plan" class="list-group mt-4">
+      <!-- Reading plan will be inserted here by JavaScript -->
+    </div>
+    <br /><br /><br /><br />
+  </div>
 
-        <!-- Modal -->
-        <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel" aria-hidden="true">
-          <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="helpModalLabel">Ajuda</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <div id="readmeContent" class="markdown-body"></div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-              </div>
-            </div>
-          </div>
+  <!-- Modal -->
+  <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="helpModalLabel">Ajuda</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
-    
-        <script>
-          document.addEventListener("DOMContentLoaded", function() {
-            fetch('https://raw.githubusercontent.com/jhonatanstarley/Girl-Bible-Reader/main/README.md')
-              .then(response => response.text())
-              .then(text => {
-                document.getElementById('readmeContent').textContent = text;
-              });
-          });
-        </script>
-    
-    <script>
-      const readingPlanData = {
-        "Os Escritos de Moisés": [["Gênesis 1-3 "], ["Gênesis 4-7"], ["Gênesis 8-11"], ["Gênesis 12-15 🔸"], ["Gênesis 16-18 🔸️"], ["Gênesis 19-22 🔸️"], ["Gênesis 23-24 🔸️"], ["Gênesis 25-27 🔸️"], ["Gênesis 28-30 🔸️"], ["Gênesis 31-32 🔸️"], ["Gênesis 33-34 🔸️"], ["Gênesis 35-37 🔸️"], ["Gênesis 38-40 🔸️"], ["Gênesis 41-42 🔸️"], ["Gênesis 43-45 🔸️"], ["Gênesis 46-48 🔸️"], ["Gênesis 49-50 🔸️"], ["Êxodo 1-4 🔸"], ["Êxodo 5-7 🔸"], ["Êxodo 8-10 🔸"], ["Êxodo 11-13 🔸"], ["Êxodo 14-15 🔸"], ["Êxodo 16-18 🔸"], ["Êxodo 19-21 🔸"], ["Êxodo 22-25"], ["Êxodo 26-28"], ["Êxodo 29-30"], ["Êxodo 31-33 🔸"], ["Êxodo 34-35 🔸"], ["Êxodo 36-38"], ["Êxodo 39-40"], ["Levítico 1-4"], ["Levítico 5-7"], ["Levítico 8-10"], ["Levítico 11-13"], ["Levítico 14-15"], ["Levítico 16-18"], ["Levítico 19-21"], ["Levítico 22-23"], ["Levítico 24-25"], ["Levítico 26-27"], ["Números 1-3"], ["Números 4-6"], ["Números 7-9"], ["Números 10-12 🔸"], ["Números 13-15 🔸"], ["Números 16-18 🔸"], ["Números 19-21 🔸"], ["Números 22-24 🔸"], ["Números 25-27 🔸"], ["Números 28-30"], ["Números 31-32 🔸"], ["Números 33-36 🔸"], ["Deuteronômio 1-2"], ["Deuteronômio 3-4 🔸"], ["Deuteronômio 5-7"], ["Deuteronômio 8-10"], ["Deuteronômio 11-13"], ["Deuteronômio 14-16"], ["Deuteronômio 17-19 🔸"], ["Deuteronômio 20-22"], ["Deuteronômio 23-26"], ["Deuteronômio 27-28"], ["Deuteronômio 29-31 🔸"], ["Deuteronômio 32 🔸"], ["Deuteronômio 33-34 🔸"],
-        ],
+        <div class="modal-body">
+          <div id="readmeContent" class="markdown-body"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-        "Israel Entra na Terra Prometida": [ ["Josué 1-4 🔸"], ["Josué 5-7 🔸"], ["Josué 8-9 🔸"], ["Josué 10-12 🔸"], ["Josué 13-15 🔸"], ["Josué 16-18 🔸"], ["Josué 19-21 🔸"], ["Josué 22-24 🔸"], ["Juízes 1-2 🔸"], ["Juízes 3-5 🔸"], ["Juízes 6-7 🔸"], ["Juízes 8-9 🔸"], ["Juízes 10-11 🔸"], ["Juízes 12-13 🔸"], ["Juízes 14-16 🔸"], ["Juízes 17-19 🔸"], ["Juízes 20-21 🔸"], ["Rute 1-4 🔸"],
-        ],
-
-        "Quando os Reis Governavam Israel": [ ["1 Samuel 1-2 🔸"], ["1 Samuel 3-6 🔸"], ["1 Samuel 7-9 🔸"], ["1 Samuel 10-12 🔸"], ["1 Samuel 13-14 🔸"], ["1 Samuel 15-16 🔸"], ["1 Samuel 17-18 🔸"], ["1 Samuel 19-21 🔸"], ["1 Samuel 22-24 🔸"], ["1 Samuel 25-27 🔸"], ["1 Samuel 28-31 🔸"], ["2 Samuel 1-2 🔸"], ["2 Samuel 3-5 🔸"], ["2 Samuel 6-8 🔸"], ["2 Samuel 9-12 🔸"], ["2 Samuel 13-14 🔸"], ["2 Samuel 15-16 🔸"], ["2 Samuel 17-18 🔸"], ["2 Samuel 19-20 🔸"], ["2 Samuel 21-22 🔸"], ["2 Samuel 23-24 🔸"], ["1 Reis 1-2 🔸"], ["1 Reis 3-5 🔸"], ["1 Reis 6-7 🔸"], ["1 Reis 8 🔸"], ["1 Reis 9-10 🔸"], ["1 Reis 11-12 🔸"], ["1 Reis 13-14 🔸"], ["1 Reis 15-17 🔸"], ["1 Reis 18-19 🔸"], ["1 Reis 20-21 🔸"], ["1 Reis 22 🔸"], ["2 Reis 1-3 🔸"], ["2 Reis 4-5 🔸"], ["2 Reis 6-8 🔸"], ["2 Reis 9-10 🔸"], ["2 Reis 11-13 🔸"], ["2 Reis 14-15 🔸"], ["2 Reis 16-17 🔸"], ["2 Reis 18-19 🔸"], ["2 Reis 20-22 🔸"], ["2 Reis 23-25 🔸"], ["1 Crônicas 1-2"], ["1 Crônicas 3-5"], ["1 Crônicas 6-7"], ["1 Crônicas 8-10"], ["1 Crônicas 11-12"], ["1 Crônicas 13-15"], ["1 Crônicas 16-17"], ["1 Crônicas 18-20"], ["1 Crônicas 21-23"], ["1 Crônicas 24-26"], ["1 Crônicas 27-29"], ["2 Crônicas 1-3"], ["2 Crônicas 4-6"], ["2 Crônicas 7-9"], ["2 Crônicas 10-14"], ["2 Crônicas 15-18"], ["2 Crônicas 19-22"], ["2 Crônicas 23-25"], ["2 Crônicas 26-28"], ["2 Crônicas 29-30"], ["2 Crônicas 31-33"], ["2 Crônicas 34-36"],
-        ],
-
-        "Os Judeus Retornam do Exílio": [ ["Esdras 1-3"], ["Esdras 4-7 🔸"], ["Esdras 8-10 🔸"], ["Neemias 1-3 🔸"], ["Neemias 4-6 🔸"], ["Neemias 7-8 🔸"], ["Neemias 9-10 🔸"], ["Neemias 11-13 🔸"], ["Ester 1-4 🔸"], ["Ester 5-10 🔸"],
-        ],
-
-        "Os Escritos de Moisés - Jó": [ ["Jó 1-5"], ["Jó 6-9"], ["Jó 10-14"], ["Jó 15-18"], ["Jó 19-20"], ["Jó 21-24"], ["Jó 25-29"], ["Jó 30-31"], ["Jó 32-34"], ["Jó 35-38"], ["Jó 39-42"],
-        ],
-
-        "Livros de Cânticos e de Sabedoria Prática": [ ["Salmos 1-8"], ["Salmos 9-16"], ["Salmos 17-19"], ["Salmos 20-25"], ["Salmos 26-31"], ["Salmos 32-35"], ["Salmos 36-38"], ["Salmos 39-42"], ["Salmos 43-47"], ["Salmos 48-52"], ["Salmos 53-58"], ["Salmos 59-64"], ["Salmos 65-68"], ["Salmos 69-72"], ["Salmos 73-77"], ["Salmos 78-79"], ["Salmos 80-86"], ["Salmos 87-90"], ["Salmos 91-96"], ["Salmos 97-103"], ["Salmos 104-105"], ["Salmos 106-108"], ["Salmos 109-115"], ["Salmos 116-119:63"], ["Salmos 119:64-176"], ["Salmos 120-129"], ["Salmos 130-138"], ["Salmos 139-144"], ["Salmos 145-150"], ["Provérbios 1-4"], ["Provérbios 5-8"], ["Provérbios 9-12"], ["Provérbios 13-16"], ["Provérbios 17-19"], ["Provérbios 20-22"], ["Provérbios 23-27"], ["Provérbios 28-31"], ["Eclesiastes 1-4"], ["Eclesiastes 5-8"], ["Eclesiastes 9-12"], ["Cânticos de Salomão 1-8"],
-        ],
-
-        "Os Profetas": [ ["Isaías 1-4"], ["Isaías 5-7"], ["Isaías 8-10"], ["Isaías 11-14"], ["Isaías 15-19"], ["Isaías 20-24"], ["Isaías 25-28"], ["Isaías 29-31"], ["Isaías 32-35"], ["Isaías 36-37"], ["Isaías 38-40"], ["Isaías 41-43"], ["Isaías 44-47"], ["Isaías 48-50"], ["Isaías 51-55"], ["Isaías 56-58"], ["Isaías 59-62"], ["Isaías 63-66"], ["Jeremias 1-3"], ["Jeremias 4-5"], ["Jeremias 6-7"], ["Jeremias 8-10"], ["Jeremias 11-13"], ["Jeremias 14-16"], ["Jeremias 17-20"], ["Jeremias 21-23"], ["Jeremias 24-26"], ["Jeremias 27-29"], ["Jeremias 30-31"], ["Jeremias 32-33"], ["Jeremias 34-36"], ["Jeremias 37-39"], ["Jeremias 40-42"], ["Jeremias 43-44"], ["Jeremias 45-48"], ["Jeremias 49-50"], ["Jeremias 51-52"], ["Lamentações 1-2"], ["Lamentações 3-5"], ["Ezequiel 1-3"], ["Ezequiel 4-6"], ["Ezequiel 7-9"], ["Ezequiel 10-12"], ["Ezequiel 13-15"], ["Ezequiel 16"], ["Ezequiel 17-18"], ["Ezequiel 19-21"], ["Ezequiel 22-23"], ["Ezequiel 24-26"], ["Ezequiel 27-28"], ["Ezequiel 29-31"], ["Ezequiel 32-33"], ["Ezequiel 34-36"], ["Ezequiel 37-38"], ["Ezequiel 39-40"], ["Ezequiel 41-43"], ["Ezequiel 44-45"], ["Ezequiel 46-48"], ["Daniel 1-2"], ["Daniel 3-4"], ["Daniel 5-7"], ["Daniel 8-10"], ["Daniel 11-12"], ["Oséias 1-7"], ["Oséias 8-14"], ["Joel 1-3"], ["Amós 1-5"], ["Amós 6-9"], ["Obadias/Jonas"], ["Miquéias 1-7"], ["Naum/Habacuque"], ["Sofonias/Ageu"], ["Zacarias 1-7"], ["Zacarias 8-11"], ["Zacarias 12-14"], ["Malaquias 1-4"],
-        ],
-
-        "Relatos da Vida e do Ministério de Jesus": [ ["Mateus 1-4"], ["Mateus 5-7"], ["Mateus 8-10"], ["Mateus 11-13"], ["Mateus 14-17"], ["Mateus 18-20"], ["Mateus 21-23"], ["Mateus 24-25"], ["Mateus 26"], ["Mateus 27-28"], ["Marcos 1-3 🔵"], ["Marcos 4-5 🔵"], ["Marcos 6-8 🔵"], ["Marcos 9-10 🔵"], ["Marcos 11-13 🔵"], ["Marcos 14-16 🔵"], ["Lucas 1-2"], ["Lucas 3-5"], ["Lucas 6-7"], ["Lucas 8-9"], ["Lucas 10-11"], ["Lucas 12-13"], ["Lucas 14-17"], ["Lucas 18-19"], ["Lucas 20-22"], ["Lucas 23-24"], ["João 1-3"], ["João 4-5"], ["João 6-7"], ["João 8-9"], ["João 10-12"], ["João 13-15"], ["João 16-18"], ["João 19-21"],
-        ],
-
-        "Crescimento da Congregação Cristã": [ ["Atos 1-3 🔵"], ["Atos 4-6 🔵"], ["Atos 7-8 🔵"], ["Atos 9-11 🔵"], ["Atos 12-14 🔵"], ["Atos 15-16 🔵"], ["Atos 17-19 🔵"], ["Atos 20-21 🔵"], ["Atos 22-23 🔵"], ["Atos 24-26 🔵"], ["Atos 27-28 🔵"], 
-        ],
-
-        "As Cartas de Paulo": [ ["Romanos 1-3"], ["Romanos 4-7"], ["Romanos 8-11"], ["Romanos 12-16"], ["1 Coríntios 1-6"], ["1 Coríntios 7-10"], ["1 Coríntios 11-14"], ["1 Coríntios 15-16"], ["2 Coríntios 1-6"], ["2 Coríntios 7-10"], ["2 Coríntios 11-13"], ["Gálatas 1-6"], ["Efésios 1-6"], ["Filipenses 1-4"], ["Colossenses 1-4"], ["1 Tessalonicenses 1-5"], ["2 Tessalonicenses 1-3"], ["1 Timóteo 1-6"], ["2 Timóteo 1-4"], ["Tito/Filêmon"], ["Hebreus 1-6"], ["Hebreus 7-10"], ["Hebreus 11-13"],
-        ],
-
-        "Escritos de Outros Apostolos e Discípulos": [ ["Tiago 1-5"], ["1 Pedro 1-5"], ["2 Pedro 1-3"], ["1 João 1-5"], ["2 João/3 João/Judas"], ["Apocalipse 1-4"], ["Apocalipse 5-9"], ["Apocalipse 10-14"], ["Apocalipse 15-18"], ["Apocalipse 19-22"],
-        ],
-      };
-
-      document.addEventListener("DOMContentLoaded", () => {
-        const startDateInput = document.getElementById("startDate");
-        const endDateInput = document.getElementById("endDate");
-        const readingPlan = document.getElementById("reading-plan");
-		const progressBar = document.getElementById("progressBar");
-        const daysRemainingText = document.getElementById("daysRemaining");
-        const daysOverdueText = document.getElementById("daysOverdue");
-        const congratsMessage = document.getElementById("congratsMessage");
-
-        let totalDays = 0;
-        let completedDays = 0;
-        let overdueDays = 0;
-        let daysRemaining = 0;
-
-        // Carregar data de início do localStorage
-        const savedStartDate = localStorage.getItem("startDate");
-        if (savedStartDate) {
-          startDateInput.value = savedStartDate;
-          const startDate = new Date(savedStartDate + "T00:00:00");
-          const endDate = new Date(startDate);
-          endDate.setDate(endDate.getDate() + 364);
-          endDateInput.value = endDate.toISOString().split("T")[0];
-          generateReadingPlan(startDate);
-          updateProgress();
-        }
-
-        startDateInput.addEventListener("change", () => {
-          const startDate = new Date(startDateInput.value + "T00:00:00");
-          if (isNaN(startDate)) return; // Verifica se a data é válida
-
-          // Salvar data de início no localStorage
-          localStorage.setItem("startDate", startDateInput.value);
-          const endDate = new Date(startDate);
-          endDate.setDate(endDate.getDate() + 364);
-          endDateInput.value = endDate.toISOString().split("T")[0];
-          generateReadingPlan(startDate);
-          updateProgress();
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      fetch('https://raw.githubusercontent.com/jhonatanstarley/Girl-Bible-Reader/main/README.md')
+        .then(response => response.text())
+        .then(text => {
+          document.getElementById('readmeContent').innerHTML = marked(text);
         });
+    });
 
-        function generateReadingPlan(startDate) {
-          readingPlan.innerHTML = "";
-          totalDays = 0;
-          completedDays = 0;
-          daysRemaining = 0;
-          overdueDays = 0;
+  </script>
 
-          let dayCount = 0;
-          for (const category in readingPlanData) {
-            const categoryHeader = document.createElement("h4");
-            categoryHeader.textContent = category;
-            categoryHeader.className = "mt-4";
-            readingPlan.appendChild(categoryHeader);
-            readingPlanData[category].forEach((chapters) => {
-              appendReadingDay(startDate, dayCount, chapters);
-              dayCount++;
-              totalDays++;
-            });
-          }
-        }
+  <script>
+    const readingPlanData = {
+      "Os Escritos de Moisés": [["Gênesis 1-3 "], ["Gênesis 4-7"], ["Gênesis 8-11"], ["Gênesis 12-15 🔸"], ["Gênesis 16-18 🔸️"], ["Gênesis 19-22 🔸️"], ["Gênesis 23-24 🔸️"], ["Gênesis 25-27 🔸️"], ["Gênesis 28-30 🔸️"], ["Gênesis 31-32 🔸️"], ["Gênesis 33-34 🔸️"], ["Gênesis 35-37 🔸️"], ["Gênesis 38-40 🔸️"], ["Gênesis 41-42 🔸️"], ["Gênesis 43-45 🔸️"], ["Gênesis 46-48 🔸️"], ["Gênesis 49-50 🔸️"], ["Êxodo 1-4 🔸"], ["Êxodo 5-7 🔸"], ["Êxodo 8-10 🔸"], ["Êxodo 11-13 🔸"], ["Êxodo 14-15 🔸"], ["Êxodo 16-18 🔸"], ["Êxodo 19-21 🔸"], ["Êxodo 22-25"], ["Êxodo 26-28"], ["Êxodo 29-30"], ["Êxodo 31-33 🔸"], ["Êxodo 34-35 🔸"], ["Êxodo 36-38"], ["Êxodo 39-40"], ["Levítico 1-4"], ["Levítico 5-7"], ["Levítico 8-10"], ["Levítico 11-13"], ["Levítico 14-15"], ["Levítico 16-18"], ["Levítico 19-21"], ["Levítico 22-23"], ["Levítico 24-25"], ["Levítico 26-27"], ["Números 1-3"], ["Números 4-6"], ["Números 7-9"], ["Números 10-12 🔸"], ["Números 13-15 🔸"], ["Números 16-18 🔸"], ["Números 19-21 🔸"], ["Números 22-24 🔸"], ["Números 25-27 🔸"], ["Números 28-30"], ["Números 31-32 🔸"], ["Números 33-36 🔸"], ["Deuteronômio 1-2"], ["Deuteronômio 3-4 🔸"], ["Deuteronômio 5-7"], ["Deuteronômio 8-10"], ["Deuteronômio 11-13"], ["Deuteronômio 14-16"], ["Deuteronômio 17-19 🔸"], ["Deuteronômio 20-22"], ["Deuteronômio 23-26"], ["Deuteronômio 27-28"], ["Deuteronômio 29-31 🔸"], ["Deuteronômio 32 🔸"], ["Deuteronômio 33-34 🔸"],
+      ],
 
-        function appendReadingDay(startDate, dayCount, chapters) {
-          const currentDate = new Date(startDate);
-          currentDate.setDate(currentDate.getDate() + dayCount);
-          const formattedDate = currentDate.toLocaleDateString("pt-BR", {
-            timeZone: "UTC",
-          });
-          const listItem = document.createElement("a");
-          listItem.href = "#";
-          listItem.className = "list-group-item list-group-item-action";
-          listItem.dataset.day = dayCount;
-          const checkbox = document.createElement("input");
-          checkbox.type = "checkbox";
-          checkbox.className = "mr-2";
-          checkbox.checked = localStorage.getItem(`day${dayCount}`) === "true";
-          checkbox.addEventListener("change", () => {
-            localStorage.setItem(`day${dayCount}`, checkbox.checked);
-            listItem.classList.toggle("completed", checkbox.checked);
-			updateProgress();
-          });
-          listItem.appendChild(checkbox);
-          listItem.appendChild(document.createTextNode(`${formattedDate}: ${chapters.join(", ")}`));
-          if (checkbox.checked) {
-            listItem.classList.add("completed");
-			completedDays++;
-          }
-		  
-          const today = new Date();
-          if (currentDate < today && !checkbox.checked) {
-            overdueDays++;
-          }
+      "Israel Entra na Terra Prometida": [["Josué 1-4 🔸"], ["Josué 5-7 🔸"], ["Josué 8-9 🔸"], ["Josué 10-12 🔸"], ["Josué 13-15 🔸"], ["Josué 16-18 🔸"], ["Josué 19-21 🔸"], ["Josué 22-24 🔸"], ["Juízes 1-2 🔸"], ["Juízes 3-5 🔸"], ["Juízes 6-7 🔸"], ["Juízes 8-9 🔸"], ["Juízes 10-11 🔸"], ["Juízes 12-13 🔸"], ["Juízes 14-16 🔸"], ["Juízes 17-19 🔸"], ["Juízes 20-21 🔸"], ["Rute 1-4 🔸"],
+      ],
 
-          readingPlan.appendChild(listItem);
-        }
-		
-		function updateProgress() {
-          completedDays = 0;
-          overdueDays = 0;
-          const today = new Date();
-		  today.setHours(0, 0, 0, 0);  // Ajusta para garantir que só compare o dia, não a hora.
+      "Quando os Reis Governavam Israel": [["1 Samuel 1-2 🔸"], ["1 Samuel 3-6 🔸"], ["1 Samuel 7-9 🔸"], ["1 Samuel 10-12 🔸"], ["1 Samuel 13-14 🔸"], ["1 Samuel 15-16 🔸"], ["1 Samuel 17-18 🔸"], ["1 Samuel 19-21 🔸"], ["1 Samuel 22-24 🔸"], ["1 Samuel 25-27 🔸"], ["1 Samuel 28-31 🔸"], ["2 Samuel 1-2 🔸"], ["2 Samuel 3-5 🔸"], ["2 Samuel 6-8 🔸"], ["2 Samuel 9-12 🔸"], ["2 Samuel 13-14 🔸"], ["2 Samuel 15-16 🔸"], ["2 Samuel 17-18 🔸"], ["2 Samuel 19-20 🔸"], ["2 Samuel 21-22 🔸"], ["2 Samuel 23-24 🔸"], ["1 Reis 1-2 🔸"], ["1 Reis 3-5 🔸"], ["1 Reis 6-7 🔸"], ["1 Reis 8 🔸"], ["1 Reis 9-10 🔸"], ["1 Reis 11-12 🔸"], ["1 Reis 13-14 🔸"], ["1 Reis 15-17 🔸"], ["1 Reis 18-19 🔸"], ["1 Reis 20-21 🔸"], ["1 Reis 22 🔸"], ["2 Reis 1-3 🔸"], ["2 Reis 4-5 🔸"], ["2 Reis 6-8 🔸"], ["2 Reis 9-10 🔸"], ["2 Reis 11-13 🔸"], ["2 Reis 14-15 🔸"], ["2 Reis 16-17 🔸"], ["2 Reis 18-19 🔸"], ["2 Reis 20-22 🔸"], ["2 Reis 23-25 🔸"], ["1 Crônicas 1-2"], ["1 Crônicas 3-5"], ["1 Crônicas 6-7"], ["1 Crônicas 8-10"], ["1 Crônicas 11-12"], ["1 Crônicas 13-15"], ["1 Crônicas 16-17"], ["1 Crônicas 18-20"], ["1 Crônicas 21-23"], ["1 Crônicas 24-26"], ["1 Crônicas 27-29"], ["2 Crônicas 1-3"], ["2 Crônicas 4-6"], ["2 Crônicas 7-9"], ["2 Crônicas 10-14"], ["2 Crônicas 15-18"], ["2 Crônicas 19-22"], ["2 Crônicas 23-25"], ["2 Crônicas 26-28"], ["2 Crônicas 29-30"], ["2 Crônicas 31-33"], ["2 Crônicas 34-36"],
+      ],
 
-          for (let i = 0; i < totalDays; i++) {
-            const checkboxChecked = localStorage.getItem(`day${i}`) === "true";
-            const dayDate = new Date(startDateInput.value);
-            dayDate.setDate(dayDate.getDate() + i);
-			dayDate.setHours(0, 0, 0, 0);  // Ajusta a data do dia também.
+      "Os Judeus Retornam do Exílio": [["Esdras 1-3"], ["Esdras 4-7 🔸"], ["Esdras 8-10 🔸"], ["Neemias 1-3 🔸"], ["Neemias 4-6 🔸"], ["Neemias 7-8 🔸"], ["Neemias 9-10 🔸"], ["Neemias 11-13 🔸"], ["Ester 1-4 🔸"], ["Ester 5-10 🔸"],
+      ],
 
-            if (checkboxChecked) {
-              completedDays++;
-            } else if (dayDate < today) {
-              overdueDays++;
-            }
-          }
+      "Os Escritos de Moisés - Jó": [["Jó 1-5"], ["Jó 6-9"], ["Jó 10-14"], ["Jó 15-18"], ["Jó 19-20"], ["Jó 21-24"], ["Jó 25-29"], ["Jó 30-31"], ["Jó 32-34"], ["Jó 35-38"], ["Jó 39-42"],
+      ],
 
-          const progressPercent = Math.floor((completedDays / totalDays) * 100);
-          progressBar.style.width = `${progressPercent}%`;
-          progressBar.setAttribute("aria-valuenow", progressPercent);
-          progressBar.textContent = `${progressPercent}%`;
+      "Livros de Cânticos e de Sabedoria Prática": [["Salmos 1-8"], ["Salmos 9-16"], ["Salmos 17-19"], ["Salmos 20-25"], ["Salmos 26-31"], ["Salmos 32-35"], ["Salmos 36-38"], ["Salmos 39-42"], ["Salmos 43-47"], ["Salmos 48-52"], ["Salmos 53-58"], ["Salmos 59-64"], ["Salmos 65-68"], ["Salmos 69-72"], ["Salmos 73-77"], ["Salmos 78-79"], ["Salmos 80-86"], ["Salmos 87-90"], ["Salmos 91-96"], ["Salmos 97-103"], ["Salmos 104-105"], ["Salmos 106-108"], ["Salmos 109-115"], ["Salmos 116-119:63"], ["Salmos 119:64-176"], ["Salmos 120-129"], ["Salmos 130-138"], ["Salmos 139-144"], ["Salmos 145-150"], ["Provérbios 1-4"], ["Provérbios 5-8"], ["Provérbios 9-12"], ["Provérbios 13-16"], ["Provérbios 17-19"], ["Provérbios 20-22"], ["Provérbios 23-27"], ["Provérbios 28-31"], ["Eclesiastes 1-4"], ["Eclesiastes 5-8"], ["Eclesiastes 9-12"], ["Cânticos de Salomão 1-8"],
+      ],
 
-          // Atualiza os dias restantes
-          const endDate = new Date(endDateInput.value);
-          const timeDiff = endDate.getTime() - today.getTime();
-          daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
+      "Os Profetas": [["Isaías 1-4"], ["Isaías 5-7"], ["Isaías 8-10"], ["Isaías 11-14"], ["Isaías 15-19"], ["Isaías 20-24"], ["Isaías 25-28"], ["Isaías 29-31"], ["Isaías 32-35"], ["Isaías 36-37"], ["Isaías 38-40"], ["Isaías 41-43"], ["Isaías 44-47"], ["Isaías 48-50"], ["Isaías 51-55"], ["Isaías 56-58"], ["Isaías 59-62"], ["Isaías 63-66"], ["Jeremias 1-3"], ["Jeremias 4-5"], ["Jeremias 6-7"], ["Jeremias 8-10"], ["Jeremias 11-13"], ["Jeremias 14-16"], ["Jeremias 17-20"], ["Jeremias 21-23"], ["Jeremias 24-26"], ["Jeremias 27-29"], ["Jeremias 30-31"], ["Jeremias 32-33"], ["Jeremias 34-36"], ["Jeremias 37-39"], ["Jeremias 40-42"], ["Jeremias 43-44"], ["Jeremias 45-48"], ["Jeremias 49-50"], ["Jeremias 51-52"], ["Lamentações 1-2"], ["Lamentações 3-5"], ["Ezequiel 1-3"], ["Ezequiel 4-6"], ["Ezequiel 7-9"], ["Ezequiel 10-12"], ["Ezequiel 13-15"], ["Ezequiel 16"], ["Ezequiel 17-18"], ["Ezequiel 19-21"], ["Ezequiel 22-23"], ["Ezequiel 24-26"], ["Ezequiel 27-28"], ["Ezequiel 29-31"], ["Ezequiel 32-33"], ["Ezequiel 34-36"], ["Ezequiel 37-38"], ["Ezequiel 39-40"], ["Ezequiel 41-43"], ["Ezequiel 44-45"], ["Ezequiel 46-48"], ["Daniel 1-2"], ["Daniel 3-4"], ["Daniel 5-7"], ["Daniel 8-10"], ["Daniel 11-12"], ["Oséias 1-7"], ["Oséias 8-14"], ["Joel 1-3"], ["Amós 1-5"], ["Amós 6-9"], ["Obadias/Jonas"], ["Miquéias 1-7"], ["Naum/Habacuque"], ["Sofonias/Ageu"], ["Zacarias 1-7"], ["Zacarias 8-11"], ["Zacarias 12-14"], ["Malaquias 1-4"],
+      ],
 
-          daysRemainingText.textContent = daysRemaining > 0 ? daysRemaining : 0;
-          daysOverdueText.textContent = overdueDays;
+      "Relatos da Vida e do Ministério de Jesus": [["Mateus 1-4"], ["Mateus 5-7"], ["Mateus 8-10"], ["Mateus 11-13"], ["Mateus 14-17"], ["Mateus 18-20"], ["Mateus 21-23"], ["Mateus 24-25"], ["Mateus 26"], ["Mateus 27-28"], ["Marcos 1-3 🔵"], ["Marcos 4-5 🔵"], ["Marcos 6-8 🔵"], ["Marcos 9-10 🔵"], ["Marcos 11-13 🔵"], ["Marcos 14-16 🔵"], ["Lucas 1-2"], ["Lucas 3-5"], ["Lucas 6-7"], ["Lucas 8-9"], ["Lucas 10-11"], ["Lucas 12-13"], ["Lucas 14-17"], ["Lucas 18-19"], ["Lucas 20-22"], ["Lucas 23-24"], ["João 1-3"], ["João 4-5"], ["João 6-7"], ["João 8-9"], ["João 10-12"], ["João 13-15"], ["João 16-18"], ["João 19-21"],
+      ],
 
-          // Mensagem de parabéns
-          if (overdueDays === 0) {
-            congratsMessage.style.display = "block";
-          } else {
-            congratsMessage.style.display = "none";
-          }
-        }
+      "Crescimento da Congregação Cristã": [["Atos 1-3 🔵"], ["Atos 4-6 🔵"], ["Atos 7-8 🔵"], ["Atos 9-11 🔵"], ["Atos 12-14 🔵"], ["Atos 15-16 🔵"], ["Atos 17-19 🔵"], ["Atos 20-21 🔵"], ["Atos 22-23 🔵"], ["Atos 24-26 🔵"], ["Atos 27-28 🔵"],
+      ],
 
-        const uploadInput = document.getElementById("uploadProgress");
-        uploadInput.addEventListener("change", (event) => {
-          const file = event.target.files[0];
-          if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-              const data = JSON.parse(e.target.result);
-              Object.keys(data).forEach(key => {
-                localStorage.setItem(key, data[key]);
-                if (key.startsWith('day')) {
-                  const dayIndex = parseInt(key.replace('day', ''));
-                  const checkbox = document.querySelector(`.list-group-item[data-day="${dayIndex}"] input`);
-                  if (checkbox) {
-                    checkbox.checked = data[key] === "true";
-                    checkbox.dispatchEvent(new Event('change')); // Atualiza a classe de completado
-                  }
-                }
-              });
-              // Atualiza a data de início se disponível
-              const savedStartDate = localStorage.getItem("startDate");
-              if (savedStartDate) {
-                const startDate = new Date(savedStartDate + "T00:00:00");
-                if (!isNaN(startDate)) {
-                  generateReadingPlan(startDate);
-                }
-              }
-              // Atualiza a página para refletir as mudanças
-              location.reload();
-            };
-            reader.readAsText(file);
-          }
-        });
+      "As Cartas de Paulo": [["Romanos 1-3"], ["Romanos 4-7"], ["Romanos 8-11"], ["Romanos 12-16"], ["1 Coríntios 1-6"], ["1 Coríntios 7-10"], ["1 Coríntios 11-14"], ["1 Coríntios 15-16"], ["2 Coríntios 1-6"], ["2 Coríntios 7-10"], ["2 Coríntios 11-13"], ["Gálatas 1-6"], ["Efésios 1-6"], ["Filipenses 1-4"], ["Colossenses 1-4"], ["1 Tessalonicenses 1-5"], ["2 Tessalonicenses 1-3"], ["1 Timóteo 1-6"], ["2 Timóteo 1-4"], ["Tito/Filêmon"], ["Hebreus 1-6"], ["Hebreus 7-10"], ["Hebreus 11-13"],
+      ],
+
+      "Escritos de Outros Apostolos e Discípulos": [["Tiago 1-5"], ["1 Pedro 1-5"], ["2 Pedro 1-3"], ["1 João 1-5"], ["2 João/3 João/Judas"], ["Apocalipse 1-4"], ["Apocalipse 5-9"], ["Apocalipse 10-14"], ["Apocalipse 15-18"], ["Apocalipse 19-22"],
+      ],
+    };
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const startDateInput = document.getElementById("startDate");
+      const endDateInput = document.getElementById("endDate");
+      const readingPlan = document.getElementById("reading-plan");
+      const progressBar = document.getElementById("progressBar");
+      const daysRemainingText = document.getElementById("daysRemaining");
+      const daysOverdueText = document.getElementById("daysOverdue");
+      const congratsMessage = document.getElementById("congratsMessage");
+
+      let totalDays = 0;
+      let completedDays = 0;
+      let overdueDays = 0;
+      let daysRemaining = 0;
+
+      // Carregar data de início do localStorage
+      const savedStartDate = localStorage.getItem("startDate");
+      if (savedStartDate) {
+        startDateInput.value = savedStartDate;
+        const startDate = new Date(savedStartDate + "T00:00:00");
+        const endDate = new Date(startDate);
+        endDate.setDate(endDate.getDate() + 364);
+        endDateInput.value = endDate.toISOString().split("T")[0];
+        generateReadingPlan(startDate);
+        updateProgress();
+      }
+
+      startDateInput.addEventListener("change", () => {
+        const startDate = new Date(startDateInput.value + "T00:00:00");
+        if (isNaN(startDate)) return; // Verifica se a data é válida
+
+        // Salvar data de início no localStorage
+        localStorage.setItem("startDate", startDateInput.value);
+        const endDate = new Date(startDate);
+        endDate.setDate(endDate.getDate() + 364);
+        endDateInput.value = endDate.toISOString().split("T")[0];
+        generateReadingPlan(startDate);
+        updateProgress();
       });
 
-      function downloadProgress() {
-          const data = JSON.stringify(localStorage);
-          const blob = new Blob([data], { type: "application/json" });
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement("a");
-          const name = document.getElementById("username").textContent;
-          a.href = url;
-          a.download = `progresso_leitura_${name}.json`;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
+      function generateReadingPlan(startDate) {
+        readingPlan.innerHTML = "";
+        totalDays = 0;
+        completedDays = 0;
+        daysRemaining = 0;
+        overdueDays = 0;
+
+        let dayCount = 0;
+        for (const category in readingPlanData) {
+          const categoryHeader = document.createElement("h4");
+          categoryHeader.textContent = category;
+          categoryHeader.className = "mt-4";
+          readingPlan.appendChild(categoryHeader);
+          readingPlanData[category].forEach((chapters) => {
+            appendReadingDay(startDate, dayCount, chapters);
+            dayCount++;
+            totalDays++;
+          });
+        }
+      }
+
+      function appendReadingDay(startDate, dayCount, chapters) {
+        const currentDate = new Date(startDate);
+        currentDate.setDate(currentDate.getDate() + dayCount);
+        const formattedDate = currentDate.toLocaleDateString("pt-BR", {
+          timeZone: "UTC",
+        });
+        const listItem = document.createElement("a");
+        listItem.href = "#";
+        listItem.className = "list-group-item list-group-item-action";
+        listItem.dataset.day = dayCount;
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.className = "mr-2";
+        checkbox.checked = localStorage.getItem(`day${dayCount}`) === "true";
+        checkbox.addEventListener("change", () => {
+          localStorage.setItem(`day${dayCount}`, checkbox.checked);
+          listItem.classList.toggle("completed", checkbox.checked);
+          updateProgress();
+        });
+        listItem.appendChild(checkbox);
+        listItem.appendChild(document.createTextNode(`${formattedDate}: ${chapters.join(", ")}`));
+        if (checkbox.checked) {
+          listItem.classList.add("completed");
+          completedDays++;
         }
 
-      function changeUserName() {
-        const username = prompt("Digite o nome do usuário:");
-        if (username) {
-          document.getElementById("username").textContent = username;
-          localStorage.setItem("username", username);
+        const today = new Date();
+        if (currentDate < today && !checkbox.checked) {
+          overdueDays++;
+        }
+
+        readingPlan.appendChild(listItem);
+      }
+
+      function updateProgress() {
+        completedDays = 0;
+        overdueDays = 0;
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);  // Ajusta para garantir que só compare o dia, não a hora.
+
+        for (let i = 0; i < totalDays; i++) {
+          const checkboxChecked = localStorage.getItem(`day${i}`) === "true";
+          const dayDate = new Date(startDateInput.value);
+          dayDate.setDate(dayDate.getDate() + i);
+          dayDate.setHours(0, 0, 0, 0);  // Ajusta a data do dia também.
+
+          if (checkboxChecked) {
+            completedDays++;
+          } else if (dayDate < today) {
+            overdueDays++;
+          }
+        }
+
+        const progressPercent = Math.floor((completedDays / totalDays) * 100);
+        progressBar.style.width = `${progressPercent}%`;
+        progressBar.setAttribute("aria-valuenow", progressPercent);
+        progressBar.textContent = `${progressPercent}%`;
+
+        // Atualiza os dias restantes
+        const endDate = new Date(endDateInput.value);
+        const timeDiff = endDate.getTime() - today.getTime();
+        daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+        daysRemainingText.textContent = daysRemaining > 0 ? daysRemaining : 0;
+        daysOverdueText.textContent = overdueDays;
+
+        // Mensagem de parabéns
+        if (overdueDays === 0) {
+          congratsMessage.style.display = "block";
+        } else {
+          congratsMessage.style.display = "none";
         }
       }
-    </script>
-    <script>
-      // Carrega a API do IFrame do YouTube de forma assíncrona
-      var tag = document.createElement("script");
-      tag.src = "https://www.youtube.com/iframe_api";
-      var firstScriptTag = document.getElementsByTagName("script")[0];
-      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-      var player;
+      const uploadInput = document.getElementById("uploadProgress");
+      uploadInput.addEventListener("change", (event) => {
+        const file = event.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            const data = JSON.parse(e.target.result);
+            Object.keys(data).forEach(key => {
+              localStorage.setItem(key, data[key]);
+              if (key.startsWith('day')) {
+                const dayIndex = parseInt(key.replace('day', ''));
+                const checkbox = document.querySelector(`.list-group-item[data-day="${dayIndex}"] input`);
+                if (checkbox) {
+                  checkbox.checked = data[key] === "true";
+                  checkbox.dispatchEvent(new Event('change')); // Atualiza a classe de completado
+                }
+              }
+            });
+            // Atualiza a data de início se disponível
+            const savedStartDate = localStorage.getItem("startDate");
+            if (savedStartDate) {
+              const startDate = new Date(savedStartDate + "T00:00:00");
+              if (!isNaN(startDate)) {
+                generateReadingPlan(startDate);
+              }
+            }
+            // Atualiza a página para refletir as mudanças
+            location.reload();
+          };
+          reader.readAsText(file);
+        }
+      });
+    });
 
-      function onYouTubeIframeAPIReady() {
-        player = new YT.Player("yt-video", { events: {   onReady: onPlayerReady, },
-        });
-      }
+    function downloadProgress() {
+      const data = JSON.stringify(localStorage);
+      const blob = new Blob([data], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      const name = document.getElementById("username").textContent;
+      a.href = url;
+      a.download = `progresso_leitura_${name}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
 
-      function onPlayerReady(event) {
-        event.target.playVideo();
-        document.addEventListener("click", function () { if (player.isMuted()) {   player.unMute(); }
-        });
-
-        // Controle de volume
-        const volumeControl = document.getElementById('volumeControl');
-        volumeControl.addEventListener('input', (e) => {
-          player.setVolume(e.target.value * 100); // volume range is 0 to 100
-        });
-      }
-    </script>
-    <script>
-      // Array de caminhos das imagens e cores
-      //const images = [
-      //    ['https://imgur.com/UXTc8QC.png', '#faa17e'], 
-      //    ['https://imgur.com/lx45Rr3.png', '#efd9b4'],
-      //    ['https://imgur.com/qi5YZoR.png', '#f3d0b7'],
-      //    ['https://imgur.com/6JeQ6Ba.png', '#6dbfc0'],
-      //    ['https://imgur.com/FTBKhhH.png', '#f49b7c'],
-      //    ['https://imgur.com/5ihMPVd.png', '#fbca75'],
-      //    ['https://imgur.com/OFMLTmD.png', '#b4f6e5']
-      //];
-      //const urlImg = 'https://raw.githubusercontent.com/jhonatanstarley/Girl-Bible-Reader/f2a9a22ba96425ec3d12302a41927f45efdea5ee/img';
-      const urlImg = 'img';
-      const images = [
-          [`${urlImg}/1.png`, '#faa17e'],
-          [`${urlImg}/9.png`, '#929594'],
-          [`${urlImg}/8.png`, '#689279'],
-          [`${urlImg}/2.png`, '#efd9b4'],
-          [`${urlImg}/10.png`, '#688590'],
-          [`${urlImg}/19.png`, '#87a28b'],
-          [`${urlImg}/3.png`, '#f3d0b7'],
-          [`${urlImg}/11.png`, '#73a1b6'],
-          [`${urlImg}/20.png`, '#6f938c'],
-          [`${urlImg}/4.png`, '#6dbfc0'],
-          [`${urlImg}/12.png`, '#798084'],
-          [`${urlImg}/21.png`, '#668d91'],
-          [`${urlImg}/5.png`, '#f49b7c'],
-          [`${urlImg}/13.png`, '#808a7b'],
-          [`${urlImg}/22.png`, '#63837a'],
-          [`${urlImg}/6.png`, '#fbca75'],
-          [`${urlImg}/14.png`, '#808a7b'],
-          [`${urlImg}/23.png`, '#849073'],
-          [`${urlImg}/7.png`, '#b4f6e5'],
-          [`${urlImg}/15.png`, '#808a7b'],
-          [`${urlImg}/24.png`, '#8b9286'],
-          [`${urlImg}/16.png`, '#769992'],
-          [`${urlImg}/25.png`, '#739285'],
-          [`${urlImg}/17.png`, '#698691'],
-          [`${urlImg}/18.png`, '#6c99ab']
-      ];
-
-      let currentIndex = 0;
-
-      function changeImage() {
-        const header = document.querySelector('.header');
-        const body = document.body;
-
-        // Atualiza a imagem de fundo do header
-        header.style.backgroundImage = `url('${images[currentIndex][0]}')`;
-
-        // Atualiza a cor de fundo do body
-        body.style.backgroundColor = images[currentIndex][1];
-
-        // Atualiza o índice para a próxima imagem/cor
-        currentIndex = (currentIndex + 1) % images.length;
-      }
-
-      // Muda a imagem a cada 8 segundos (10000 milissegundos)
-      setInterval(changeImage, 8000);
-
-      // Inicia com a primeira imagem
-      window.onload = changeImage;
-</script>
-
-<script>
-  // Função para obter o nome do usuário
-  function getUserName() {
-    let name = localStorage.getItem('username');
-    if (!name) {
-      name = prompt('Por favor, insira seu nome:');
-      if (name) {
-        localStorage.setItem('username', name);
+    function changeUserName() {
+      const username = prompt("Digite o nome do usuário:");
+      if (username) {
+        document.getElementById("username").textContent = username;
+        localStorage.setItem("username", username);
       }
     }
-    return name || 'Visitante';
-  }
+  </script>
+  <script>
+    // Carrega a API do IFrame do YouTube de forma assíncrona
+    var tag = document.createElement("script");
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName("script")[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-  // Função para definir o nome do usuário
-  function setUserName(name) {
-    localStorage.setItem('username', name);
-    document.getElementById('username').innerText = name;
-  }
+    var player;
 
-  // Função para trocar o nome do usuário
-  function changeUserName() {
-    const newName = prompt('Por favor, insira seu novo nome:');
-    if (newName) {
-      setUserName(newName);
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player("yt-video", {
+        events: { onReady: onPlayerReady, },
+      });
     }
-  }
 
-  // Inicializa o nome do usuário no carregamento da página
-  document.getElementById('username').innerText = getUserName();
-</script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  </body>
+    function onPlayerReady(event) {
+      event.target.playVideo();
+      document.addEventListener("click", function () {
+        if (player.isMuted()) { player.unMute(); }
+      });
+
+      // Controle de volume
+      const volumeControl = document.getElementById('volumeControl');
+      volumeControl.addEventListener('input', (e) => {
+        player.setVolume(e.target.value * 100); // volume range is 0 to 100
+      });
+    }
+  </script>
+  <script>
+    // Array de caminhos das imagens e cores
+    //const images = [
+    //    ['https://imgur.com/UXTc8QC.png', '#faa17e'], 
+    //    ['https://imgur.com/lx45Rr3.png', '#efd9b4'],
+    //    ['https://imgur.com/qi5YZoR.png', '#f3d0b7'],
+    //    ['https://imgur.com/6JeQ6Ba.png', '#6dbfc0'],
+    //    ['https://imgur.com/FTBKhhH.png', '#f49b7c'],
+    //    ['https://imgur.com/5ihMPVd.png', '#fbca75'],
+    //    ['https://imgur.com/OFMLTmD.png', '#b4f6e5']
+    //];
+    //const urlImg = 'https://raw.githubusercontent.com/jhonatanstarley/Girl-Bible-Reader/f2a9a22ba96425ec3d12302a41927f45efdea5ee/img';
+    const urlImg = 'img';
+    const images = [
+      [`${urlImg}/1.png`, '#faa17e'],
+      [`${urlImg}/9.png`, '#929594'],
+      [`${urlImg}/8.png`, '#689279'],
+      [`${urlImg}/2.png`, '#efd9b4'],
+      [`${urlImg}/10.png`, '#688590'],
+      [`${urlImg}/19.png`, '#87a28b'],
+      [`${urlImg}/3.png`, '#f3d0b7'],
+      [`${urlImg}/11.png`, '#73a1b6'],
+      [`${urlImg}/20.png`, '#6f938c'],
+      [`${urlImg}/4.png`, '#6dbfc0'],
+      [`${urlImg}/12.png`, '#798084'],
+      [`${urlImg}/21.png`, '#668d91'],
+      [`${urlImg}/5.png`, '#f49b7c'],
+      [`${urlImg}/13.png`, '#808a7b'],
+      [`${urlImg}/22.png`, '#63837a'],
+      [`${urlImg}/6.png`, '#fbca75'],
+      [`${urlImg}/14.png`, '#808a7b'],
+      [`${urlImg}/23.png`, '#849073'],
+      [`${urlImg}/7.png`, '#b4f6e5'],
+      [`${urlImg}/15.png`, '#808a7b'],
+      [`${urlImg}/24.png`, '#8b9286'],
+      [`${urlImg}/16.png`, '#769992'],
+      [`${urlImg}/25.png`, '#739285'],
+      [`${urlImg}/17.png`, '#698691'],
+      [`${urlImg}/18.png`, '#6c99ab']
+    ];
+
+    let currentIndex = 0;
+
+    function changeImage() {
+      const header = document.querySelector('.header');
+      const body = document.body;
+
+      // Atualiza a imagem de fundo do header
+      header.style.backgroundImage = `url('${images[currentIndex][0]}')`;
+
+      // Atualiza a cor de fundo do body
+      body.style.backgroundColor = images[currentIndex][1];
+
+      // Atualiza o índice para a próxima imagem/cor
+      currentIndex = (currentIndex + 1) % images.length;
+    }
+
+    // Muda a imagem a cada 8 segundos (10000 milissegundos)
+    setInterval(changeImage, 8000);
+
+    // Inicia com a primeira imagem
+    window.onload = changeImage;
+  </script>
+
+  <script>
+    // Função para obter o nome do usuário
+    function getUserName() {
+      let name = localStorage.getItem('username');
+      if (!name) {
+        name = prompt('Por favor, insira seu nome:');
+        if (name) {
+          localStorage.setItem('username', name);
+        }
+      }
+      return name || 'Visitante';
+    }
+
+    // Função para definir o nome do usuário
+    function setUserName(name) {
+      localStorage.setItem('username', name);
+      document.getElementById('username').innerText = name;
+    }
+
+    // Função para trocar o nome do usuário
+    function changeUserName() {
+      const newName = prompt('Por favor, insira seu novo nome:');
+      if (newName) {
+        setUserName(newName);
+      }
+    }
+
+    // Inicializa o nome do usuário no carregamento da página
+    document.getElementById('username').innerText = getUserName();
+  </script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
 </html>
