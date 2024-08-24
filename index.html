@@ -160,7 +160,8 @@
       <p><strong>Dias Atrasados:</strong> <span id="daysOverdue">0</span></p>
       <p class="congrats-message" id="congratsMessage" style="display: none;"><strong>Parabéns! Sua leitura está em dia!</strong></p>
       <hr></hr>
-	  <div name="dailyText" id="dailyText"><strong>Leia o texto diário clicando <a href="https://wol.jw.org/pt/wol/h/r5/lp-t" target="_blank">aqui!<a></strong></iframe></div>
+	  <!--<div name="dailyText" id="dailyText"><strong>Leia o texto diário clicando <a href="https://wol.jw.org/pt/wol/h/r5/lp-t" target="_blank">aqui!<a></strong></div>-->
+	  <div name="dailyText" id="dailyText"></div>
 	  <hr></hr>
       <div class="form-group">
         <label for="startDate"><strong>Data de Início:</strong></label>
@@ -643,6 +644,59 @@
 
   // Inicializa o nome do usuário no carregamento da página
   document.getElementById('username').innerText = getUserName();
+</script>
+<script>
+  function fetchAndExtractContent() {
+    var today = new Date();
+    var year = today.getFullYear();
+    var month = today.getMonth() + 1; // getMonth() retorna de 0-11, então somamos 1
+    var day = today.getDate();
+
+    // Garantir que o mês e o dia estejam no formato de dois dígitos
+    if (month < 10) month = '0' + month;
+    if (day < 10) day = '0' + day;
+
+    var formattedDate = year + '/' + month + '/' + day;
+
+    var url = "https://cors-anywhere.herokuapp.com/https://wol.jw.org/pt/wol/h/r5/lp-t/" + formattedDate;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url, true);
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        var tempDiv = document.createElement('div');
+        tempDiv.innerHTML = xhr.responseText;
+
+        var articleContent = tempDiv.querySelector('.articlePositioner');
+        if (articleContent) {
+          var fullText = articleContent.innerHTML;
+
+          // Encontrar as ocorrências de "Examine as Escrituras Diariamente — 2024"
+          var firstOccurrence = fullText.indexOf("Examine as Escrituras Diariamente — 2024");
+          var secondOccurrence = fullText.indexOf("Examine as Escrituras Diariamente — 2024", firstOccurrence + 1);
+
+          if (firstOccurrence !== -1 && secondOccurrence !== -1) {
+            var extractedContent = fullText.substring(firstOccurrence + 38, secondOccurrence).trim();
+
+            // Remove qualquer número inicial e espaços extras
+            extractedContent = extractedContent.replace(/^\s*\d+\s*/, '');
+
+            // Exibir o conteúdo extraído
+            document.getElementById('dailyText').innerHTML = extractedContent;
+          } else {
+            document.getElementById('dailyText').innerHTML = `<div name="dailyText" id="dailyText"><strong>Leia o texto diário clicando <a href="https://wol.jw.org/pt/wol/h/r5/lp-t" target="_blank">aqui!<a></strong></iframe></div>`;
+          }
+        } else {
+          document.getElementById('dailyText').innerHTML = `<div name="dailyText" id="dailyText"><strong>Leia o texto diário clicando <a href="https://wol.jw.org/pt/wol/h/r5/lp-t" target="_blank">aqui!<a></strong></iframe></div>`;
+        }
+      } else if (xhr.readyState === 4 && xhr.status !== 200) {
+        document.getElementById('dailyText').innerHTML = `<div name="dailyText" id="dailyText"><strong>Leia o texto diário clicando <a href="https://wol.jw.org/pt/wol/h/r5/lp-t" target="_blank">aqui!<a></strong></iframe></div>`;
+      }
+    };
+    xhr.send();
+  }
+
+  fetchAndExtractContent();
 </script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
