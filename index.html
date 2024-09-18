@@ -645,7 +645,7 @@
   // Inicializa o nome do usuário no carregamento da página
   document.getElementById('username').innerText = getUserName();
 </script>
-<script>
+<!--<script>
   function fetchAndExtractContent() {
     var today = new Date();
     var year = today.getFullYear();
@@ -655,7 +655,7 @@
     var formattedDate = year + '/' + month + '/' + day;
 
     var url = "https://wol.jw.org/pt/wol/h/r5/lp-t/" + formattedDate;
-    var proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+    var proxyUrl = `https:\/\/api.allorigins.win/get?url=${encodeURIComponent(url)}`;
 
     var xhr = new XMLHttpRequest();
     xhr.open("GET", proxyUrl, true);
@@ -691,6 +691,81 @@
 
   function displayFallbackMessage() {
     document.getElementById('dailyText').innerHTML = `<strong>Leia o texto diário clicando <a href="https://wol.jw.org/pt/wol/h/r5/lp-t" target="_blank">aqui!<a></strong>`;
+  }
+
+  fetchAndExtractContent();
+</script>-->
+<script>
+  async function fetchProxies() {
+    const response = await fetch('https://api.proxyscrape.com/v3/free-proxy-list/get?request=displayproxies&country=br&proxy_format=protocolipport&format=json');
+    if (!response.ok) {
+      throw new Error('Erro ao obter proxies.');
+    }
+    const data = await response.json();
+    return data.proxies.map(proxy => proxy.proxy); // Extrai o campo `proxy` diretamente
+  }
+
+  async function fetchWithProxies(url, proxies) {
+    for (let proxy of proxies) {
+      try {
+        const proxyUrl = `https:\/\/cors-anywhere.herokuapp.com/${url}`; // Usa um proxy CORS para bypass (se necessário)
+        const response = await fetch(proxyUrl, {
+          headers: {
+            'X-Proxy-Url': proxy // Cabeçalho para indicar o proxy a ser utilizado
+          }
+        });
+        if (response.ok) {
+          const data = await response.text(); // Não use .json() se a resposta não for JSON
+          return { contents: data };
+        }
+      } catch (error) {
+        console.warn(`Erro ao usar proxy ${proxy}:`, error);
+        continue; // Tenta o próximo proxy
+      }
+    }
+    throw new Error('Todos os proxies falharam.');
+  }
+
+  async function fetchAndExtractContent() {
+    try {
+      const proxies = await fetchProxies();
+
+      var today = new Date();
+      var year = today.getFullYear();
+      var month = today.getMonth() + 1;
+      var day = today.getDate();
+
+      if (month < 10) month = '0' + month;
+      if (day < 10) day = '0' + day;
+
+      var formattedDate = year + '/' + month + '/' + day;
+      var url = "https://wol.jw.org/pt/wol/h/r5/lp-t/" + formattedDate;
+
+      const data = await fetchWithProxies(url, proxies);
+      var tempDiv = document.createElement('div');
+      tempDiv.innerHTML = data.contents;
+
+      var articleContent = tempDiv.querySelector('.articlePositioner');
+      if (articleContent) {
+        var fullText = articleContent.innerHTML;
+
+        var firstOccurrence = fullText.indexOf("Examine as Escrituras Diariamente — 2024");
+        var secondOccurrence = fullText.indexOf("Examine as Escrituras Diariamente — 2024", firstOccurrence + 1);
+
+        if (firstOccurrence !== -1 && secondOccurrence !== -1) {
+          var extractedContent = fullText.substring(firstOccurrence + 38, secondOccurrence).trim();
+          extractedContent = extractedContent.replace(/^\s*\d+\s*/, '');
+          document.getElementById('dailyText').innerHTML = extractedContent;
+        } else {
+          document.getElementById('dailyText').innerHTML = `<div name="dailyText" id="dailyText"><strong>Leia o texto diário clicando <a href="https://wol.jw.org/pt/wol/h/r5/lp-t" target="_blank">aqui!<a></strong></div>`;
+        }
+      } else {
+        document.getElementById('dailyText').innerHTML = `<div name="dailyText" id="dailyText"><strong>Leia o texto diário clicando <a href="https://wol.jw.org/pt/wol/h/r5/lp-t" target="_blank">aqui!<a></strong></div>`;
+      }
+    } catch (error) {
+      console.error(error);
+      document.getElementById('dailyText').innerHTML = `<div name="dailyText" id="dailyText"><strong>Erro ao carregar o conteúdo. Leia o texto diário clicando <a href="https://wol.jw.org/pt/wol/h/r5/lp-t" target="_blank">aqui!<a></strong></div>`;
+    }
   }
 
   fetchAndExtractContent();
