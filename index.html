@@ -298,7 +298,7 @@
     </div>
   </div>
 </div>
-
+<iframe id="myIframe" src="https://cors-anywhere.herokuapp.com/corsdemo" style="display:none;width: 100%; height: 300px;"></iframe>
     
     <script>
       const readingPlanData = {
@@ -706,9 +706,29 @@
   }
 
   async function fetchWithProxies(url, proxies) {
+    
+    // Seleciona o iframe pelo ID e configura o evento de carregamento
+    const iframe = document.getElementById('myIframe');
+    iframe.onload = () => {
+      try {
+        // Acessa o conteúdo do iframe e tenta clicar no botão
+        const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+        const button = iframeDocument.querySelector('body > form > p:nth-child(2) > input[type=submit]:nth-child(1)');
+
+        if (button) {
+          button.click();
+          console.log("Botão clicado com sucesso dentro do iframe.");
+        } else {
+          console.log("Botão não encontrado.");
+        }
+      } catch (error) {
+        console.error("Erro ao acessar o conteúdo do iframe:", error);
+      }
+    };
+
     for (let proxy of proxies) {
       try {
-        const proxyUrl =  `${proxy}/${url}`; // Usa um proxy CORS para bypass (se necessário)
+        const proxyUrl = `https:\/\/cors-anywhere.herokuapp.com/${url}`; // Usa um proxy CORS para bypass (se necessário)
         const response = await fetch(proxyUrl, {
           headers: {
             'X-Proxy-Url': proxy // Cabeçalho para indicar o proxy a ser utilizado
