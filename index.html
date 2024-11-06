@@ -708,7 +708,7 @@
   async function fetchWithProxies(url, proxies) {
     for (let proxy of proxies) {
       try {
-        const proxyUrl = `https:\/\/cors-anywhere.herokuapp.com/${url}`; // Usa um proxy CORS para bypass (se necessário)
+        const proxyUrl =  `${proxy}/${url}`; // Usa um proxy CORS para bypass (se necessário)
         const response = await fetch(proxyUrl, {
           headers: {
             'X-Proxy-Url': proxy // Cabeçalho para indicar o proxy a ser utilizado
