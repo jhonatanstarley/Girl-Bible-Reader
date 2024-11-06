@@ -702,13 +702,7 @@
       throw new Error('Erro ao obter proxies.');
     }
     const data = await response.json();
-    //return data.proxies.map(proxy => proxy.proxy); // Extrai o campo `proxy` diretamente
-    const corsAnywhereProxy = `https:\/\/cors-anywhere.herokuapp.com/`;
-	  const filteredProxies = data.proxies
-		.filter(proxy => proxy.proxy.startsWith('http'))
-		.map(proxy => proxy.proxy);
-
-	  return [corsAnywhereProxy].concat(filteredProxies);
+    return data.proxies.map(proxy => proxy.proxy); // Extrai o campo `proxy` diretamente
   }
 
   async function fetchWithProxies(url, proxies) {
@@ -734,8 +728,7 @@
 
     for (let proxy of proxies) {
       try {
-        const proxyUrl = `${proxy}/${url}`;
-        //`https:\/\/cors-anywhere.herokuapp.com/${url}`; // Usa um proxy CORS para bypass (se necessário)
+        const proxyUrl = `https:\/\/cors-anywhere.herokuapp.com/${url}`; // Usa um proxy CORS para bypass (se necessário)
         const response = await fetch(proxyUrl, {
           headers: {
             'X-Proxy-Url': proxy // Cabeçalho para indicar o proxy a ser utilizado
