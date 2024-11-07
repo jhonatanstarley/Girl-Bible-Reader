@@ -10,6 +10,16 @@
     />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" type="image/png" href="/assets/Biblia.36x36.png" sizes="36x36">
+    <link rel="icon" type="image/png" href="/assets/Biblia.48x48.png" sizes="48x48">
+    <link rel="icon" type="image/png" href="/assets/Biblia.72x72.png" sizes="72x72">
+    <link rel="icon" type="image/png" href="/assets/Biblia.96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="/assets/Biblia.144x144.png" sizes="144x144">
+    <link rel="icon" type="image/png" href="/assets/Biblia.192x192.png" sizes="192x192">
+    <link rel="icon" type="image/png" href="/assets/Biblia.256x256.png" sizes="256x256">
+    <link rel="icon" type="image/png" href="/assets/Biblia.512x512.png" sizes="512x512">
+
     <style>
       body {
         -webkit-text-size-adjust: 100%;
@@ -804,5 +814,15 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js').then(reg => {
+          console.log('Service Worker registrado:', reg);
+        }).catch(err => {
+          console.log('Erro ao registrar o Service Worker:', err);
+        });
+      }
+    </script>
+    
   </body>
 </html>
