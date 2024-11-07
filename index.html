@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Plano de Leitura da Bíblia em 1 Ano</title>
+    <title>Biblia365</title>
     <link
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
       rel="stylesheet"
@@ -19,6 +19,22 @@
     <link rel="icon" type="image/png" href="/assets/Biblia.192x192.png" sizes="192x192">
     <link rel="icon" type="image/png" href="/assets/Biblia.256x256.png" sizes="256x256">
     <link rel="icon" type="image/png" href="/assets/Biblia.512x512.png" sizes="512x512">
+    
+    <!-- Define a cor da barra de status no Safari -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- Permite que o PWA funcione em tela cheia no iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Define o nome do aplicativo ao ser adicionado à tela inicial no iOS -->
+    <meta name="apple-mobile-web-app-title" content="Biblia365">
+
+    <!-- Ícones específicos para iOS -->
+    <link rel="apple-touch-icon" href="/assets/Biblia.192x192.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/assets/Biblia.144x144.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/Biblia.192x192.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="/assets/Biblia.256x256.png">
+
 
     <style>
       body {
@@ -798,14 +814,14 @@
           extractedContent = extractedContent.replace(/^\s*\d+\s*/, '');
           document.getElementById('dailyText').innerHTML = extractedContent;
         } else {
-          document.getElementById('dailyText').innerHTML = `<div name="dailyText" id="dailyText"><strong>Leia o texto diário clicando <a href="https://wol.jw.org/pt/wol/h/r5/lp-t" target="_blank">aqui!<a></strong></div>`;
+          document.getElementById('dailyText').innerHTML = `<div name="dailyText" id="dailyText"><strong>Leia o texto diário clicando <a href="https://wol.jw.org/pt/wol/h/r5/lp-t" target="_blank">aqui!<a></strong></div><br><small class="form-text text-muted">Se quiser liberar o texto diário na página, clique <a href="https://cors-anywhere.herokuapp.com/corsdemo">aqui</a> e clique no botão <a>Request temporary access to the demo server</a>. Pronto agora é só atualizar a página!</small>`;
         }
       } else {
-        document.getElementById('dailyText').innerHTML = `<div name="dailyText" id="dailyText"><strong>Leia o texto diário clicando <a href="https://wol.jw.org/pt/wol/h/r5/lp-t" target="_blank">aqui!<a></strong></div>`;
+        document.getElementById('dailyText').innerHTML = `<div name="dailyText" id="dailyText"><strong>Leia o texto diário clicando <a href="https://wol.jw.org/pt/wol/h/r5/lp-t" target="_blank">aqui!<a></strong></div><br><small class="form-text text-muted">Se quiser liberar o texto diário na página, clique <a href="https://cors-anywhere.herokuapp.com/corsdemo">aqui</a> e clique no botão <a>Request temporary access to the demo server</a>. Pronto agora é só atualizar a página!</small>`;
       }
     } catch (error) {
       console.error(error);
-      document.getElementById('dailyText').innerHTML = `<div name="dailyText" id="dailyText"><strong>Leia o texto diário clicando <a href="https://wol.jw.org/pt/wol/h/r5/lp-t" target="_blank">aqui!<a></strong></div>`;
+      document.getElementById('dailyText').innerHTML = `<div name="dailyText" id="dailyText"><strong>Leia o texto diário clicando <a href="https://wol.jw.org/pt/wol/h/r5/lp-t" target="_blank">aqui!<a></strong></div><br><small class="form-text text-muted">Se quiser liberar o texto diário na página, clique <a href="https://cors-anywhere.herokuapp.com/corsdemo">aqui</a> e clique no botão <a>Request temporary access to the demo server</a>. Pronto agora é só atualizar a página!</small>`;
     }
   }
 
