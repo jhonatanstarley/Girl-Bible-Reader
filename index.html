@@ -47,7 +47,7 @@
         text-decoration: line-through;
       }
 
-      iframe {
+      #yt-video {
         display: none;
       }
 
@@ -126,6 +126,17 @@
         bottom: 180px; /* Ajuste a posição para ficar acima do botão do WhatsApp */
         right: 20px;
         text-decoration: none; /* Remove underline */
+      }
+      #myIframe {
+        position: fixed; /* Fixa o iframe na tela */
+        bottom: 0;          /* Posiciona no topo da página */
+        left: 0;         /* Alinha à esquerda */
+        width: 100%;     /* Ocupa toda a largura da página */
+        height: 300px;  /* Define a altura desejada, ajuste conforme necessário */
+        z-index: 9999;   /* Garante que fique acima dos outros elementos */
+        border: none;    /* Remove a borda do iframe */
+        display: none;
+        
       }
     </style>
   </head>
@@ -298,7 +309,7 @@
     </div>
   </div>
 </div>
-<iframe id="myIframe" src="https://cors-anywhere.herokuapp.com/corsdemo" style="display:none;width: 100%; height: 300px;"></iframe>
+<iframe id="myIframe" src="https://cors-anywhere.herokuapp.com/corsdemo"></iframe>
     
     <script>
       const readingPlanData = {
