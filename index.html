@@ -766,13 +766,13 @@
         console.error("Erro ao acessar o conteúdo do iframe:", error);
       }
     };
-
+    const ch = 'https:\/\/cors-anywhere.herokuapp.com/';
     for (let proxy of proxies) {
       try {
-        const proxyUrl = `https:\/\/cors-anywhere.herokuapp.com/${url}`; // Usa um proxy CORS para bypass (se necessário)
+        const proxyUrl = `${ch}${url}`; // Usa um proxy CORS para bypass (se necessário)
         const response = await fetch(proxyUrl, {
           headers: {
-            'X-Proxy-Url': proxy // Cabeçalho para indicar o proxy a ser utilizado
+            'X-Proxy-Url': proxyUrl  //proxy Cabeçalho para indicar o proxy a ser utilizado
           }
         });
         if (response.ok) {
