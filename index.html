@@ -184,31 +184,56 @@
         
       }
       #googleLoginButton {
-        position: absolute;
-        top: 10px; /* Distância do topo */
-        right: 20px; /* Distância da lateral direita */
-        background-color: #4285f4; /* Cor azul padrão do Google */
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 14px;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-      }
+  background-color: #4285f4; /* Cor azul padrão do Google */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
 
-      #googleLoginButton:hover {
-        background-color: #357ae8; /* Cor azul mais escura no hover */
-      }
+#googleLoginButton:hover {
+  background-color: #357ae8; /* Cor azul mais escura no hover */
+}
+
+#switchAccountButton {
+  background-color: #f44336; /* Vermelho para diferenciar do botão de login */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#switchAccountButton:hover {
+  background-color: #d32f2f; /* Vermelho mais escuro no hover */
+}
+
+.auth-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Espaçamento entre os botões */
+  position: absolute;
+  top: 10px; /* Distância do topo */
+  right: 20px; /* Distância da lateral direita */
+}
+
     </style>
   </head>
 
   <body>
     <div class="container mt-5">
+      <div class="auth-buttons">
+        <button id="googleLoginButton">Logar com Google</button>
+        <button id="switchAccountButton" onclick="logoutGoogle()">Trocar Conta</button>
+      </div>      
       <div class="header">
         <h1 class="text-center">Programação de Leitura da Bíblia em 1 Ano</h1>
         <h3 class="text-right" id="username"></h3>
-        <button id="googleLoginButton">Logar com Google</button>
         <button type="button" id="button" name="button" class="floating-button" onclick="changeUserName()">✎</button>
         <a
           href="https://api.whatsapp.com/send/?phone=5522997818598&text=Ol%C3%A1%21%0A%0ATenho%20uma%20sugest%C3%A3o%20para%20o%20programa%20de%20leitura%20da%20biblia%20em%201%20ano.%0AT%C3%A1%20podendo%20falar%3F&type=phone_number&app_absent=0"
@@ -889,6 +914,16 @@
   document.head.appendChild(script);
 }
 
+function logoutGoogle() {
+  const clientId = gapi.auth2.getAuthInstance().currentUser.get().getId();
+  google.accounts.id.revoke(clientId, () => {
+    console.log("Conta revogada com sucesso.");
+    alert("Você saiu da conta Google. Faça login novamente.");
+    initializeGoogleAuth(); // Recarrega o botão de login
+  });
+}
+
+
 function initializeGoogleAuth() {
   google.accounts.id.initialize({
     client_id: '623246086163-khqml6lntrh8khrlmpobe5296slbbr3f.apps.googleusercontent.com',
@@ -904,9 +939,17 @@ function initializeGoogleAuth() {
 }
 
 function handleCredentialResponse(response) {
-  console.log("Resposta recebida do Google:", response);
-  document.getElementById('username').innerText = response.name || 'Usuário';
+  // Atualiza o nome de usuário e exibe na página
+  const decodedCredential = JSON.parse(atob(response.credential.split('.')[1])); // Decodifica o JWT
+  const userName = decodedCredential.name;
+  document.getElementById('username').innerText = userName;
+
+  // Salva informações para uso futuro
+  localStorage.setItem('googleUserName', userName);
+
+  console.log("Usuário logado:", userName);
 }
+
 
 // Carregar script e inicializar Google Auth
 window.onload = () => {
@@ -928,7 +971,7 @@ window.onload = () => {
   const fileContent = JSON.stringify(localStorage); // Dados do progresso
   const file = new Blob([fileContent], { type: 'application/json' });
   const metadata = {
-    name: `progresso_leitura_${googleUser.name}.json`,
+    name: `progresso_leitura_${user.getBasicProfile().getName()}.json`,
     mimeType: 'application/json',
     parents: ['appDataFolder'], // Salvar na pasta do app no Drive
   };
@@ -945,9 +988,23 @@ window.onload = () => {
     body: form,
   })
     .then((res) => res.json())
-    .then((data) => console.log('Arquivo salvo:', data))
-    .catch((error) => console.error('Erro ao salvar no Google Drive:', error));
+    .then((data) => {
+      if (data.id) {
+        // Sucesso no upload
+        alert('Progresso salvo com sucesso no Google Drive!');
+      } else {
+        // Falha inesperada
+        alert('Houve um problema ao salvar o progresso no Google Drive.');
+        console.error('Erro ao salvar no Google Drive:', data);
+      }
+    })
+    .catch((error) => {
+      // Erro na requisição
+      alert('Erro ao salvar no Google Drive. Por favor, tente novamente.');
+      console.error('Erro ao salvar no Google Drive:', error);
+    });
 }
+
 
     </script>
     <script>
