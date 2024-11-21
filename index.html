@@ -43,6 +43,7 @@
     <script>
       // Função única para inicializar o GAPI
       function initializeGapi() {
+        console.log("Verificando API do Google...");
         if (typeof gapi === "undefined") {
           console.error("API Google não carregada.");
           return;
@@ -51,6 +52,7 @@
         console.log("API Google carregada com sucesso.");
     
         gapi.load("client:auth2", () => {
+          console.log("Iniciando gapi.client e auth2...");
           gapi.client
             .init({
               clientId: '623246086163-khqml6lntrh8khrlmpobe5296slbbr3f.apps.googleusercontent.com', // Client ID do ambiente Vercel
@@ -58,7 +60,7 @@
             })
             .then(() => {
               console.log("GAPI inicializado.");
-              loadProgressFromGoogleDrive(); // Função personalizada para carregar progresso
+              loadProgressFromGoogleDrive(); // Função para carregar progresso
             })
             .catch((error) => {
               console.error("Erro ao inicializar o GAPI:", error);
@@ -67,45 +69,57 @@
       }
     
       function logoutGoogle() {
-  // Verifica se a API do Google foi carregada
-  if (typeof gapi === "undefined") {
-    console.error("API Google não carregada.");
-    return;
-  }
-
-  // Verifica se o auth2 foi inicializado
-  const authInstance = gapi.auth2?.getAuthInstance();
-  if (!authInstance) {
-    console.error("Instância de autenticação não encontrada. Inicializando agora...");
-    gapi.load("auth2", () => {
-      gapi.auth2.init({
-        client_id: '623246086163-khqml6lntrh8khrlmpobe5296slbbr3f.apps.googleusercontent.com'
-      }).then((auth) => {
-        auth.signOut().then(() => {
-          console.log("Usuário desconectado após reinicialização.");
-          document.getElementById("username").innerText = "Visitante";
-          localStorage.removeItem("username");
-        }).catch((error) => {
-          console.error("Erro ao desconectar o usuário após reinicialização:", error);
-        });
-      }).catch((error) => {
-        console.error("Erro ao inicializar auth2 para logout:", error);
-      });
-    });
-    return;
-  }
-
-  // Se já estiver inicializado, realiza o logout diretamente
-  authInstance.signOut().then(() => {
-    console.log("Usuário desconectado.");
-    document.getElementById("username").innerText = "Visitante";
-    localStorage.removeItem("username");
-  }).catch((error) => {
-    console.error("Erro ao desconectar o usuário:", error);
-  });
-}
-
-    </script>    
+        console.log("Tentando desconectar o usuário...");
+    
+        // Verifica se a API do Google foi carregada
+        if (typeof gapi === "undefined") {
+          console.error("API Google não carregada.");
+          return;
+        }
+    
+        // Verifica se o auth2 foi inicializado
+        const authInstance = gapi.auth2?.getAuthInstance();
+        if (!authInstance) {
+          console.error("Instância de autenticação não encontrada. Inicializando agora...");
+          gapi.load("auth2", () => {
+            gapi.auth2
+              .init({
+                client_id: '623246086163-khqml6lntrh8khrlmpobe5296slbbr3f.apps.googleusercontent.com',
+              })
+              .then((auth) => {
+                console.log("auth2 inicializado. Tentando desconectar...");
+                auth
+                  .signOut()
+                  .then(() => {
+                    console.log("Usuário desconectado após reinicialização.");
+                    document.getElementById("username").innerText = "Visitante";
+                    localStorage.removeItem("username");
+                  })
+                  .catch((error) => {
+                    console.error("Erro ao desconectar o usuário após reinicialização:", error);
+                  });
+              })
+              .catch((error) => {
+                console.error("Erro ao inicializar auth2:", error);
+              });
+          });
+          return;
+        }
+    
+        // Se auth2 já estiver inicializado, realiza o logout diretamente
+        authInstance
+          .signOut()
+          .then(() => {
+            console.log("Usuário desconectado.");
+            document.getElementById("username").innerText = "Visitante";
+            localStorage.removeItem("username");
+          })
+          .catch((error) => {
+            console.error("Erro ao desconectar o usuário:", error);
+          });
+      }
+    </script>
+      
     <script src="https://apis.google.com/js/api.js" async defer onload="initializeGapi()"></script>
     
     
@@ -958,110 +972,99 @@
     </script>
     <script>
       let googleUser;
-
+    
       function loadGoogleScript(callback) {
-  const script = document.createElement('script');
-  script.src = "https://accounts.google.com/gsi/client";
-  script.async = true;
-  script.defer = true;
-  script.onload = callback; // Executa o callback após o script carregar
-  script.onerror = () => console.error("Falha ao carregar a API do Google.");
-  document.head.appendChild(script);
-}
-
-function initializeGoogleAuth() {
-  google.accounts.id.initialize({
-    client_id: '623246086163-khqml6lntrh8khrlmpobe5296slbbr3f.apps.googleusercontent.com',
-    callback: handleCredentialResponse,
-  });
-
-  google.accounts.id.renderButton(
-    document.getElementById('googleLoginButton'),
-    { theme: 'outline', size: 'large' }
-  );
-
-  console.log("Botão Google renderizado com sucesso.");
-}
-
-function handleCredentialResponse(response) {
-  // Atualiza o nome de usuário e exibe na página
-  const decodedCredential = JSON.parse(atob(response.credential.split('.')[1])); // Decodifica o JWT
-  const userName = decodedCredential.name;
-  document.getElementById('username').innerText = userName;
-
-  // Salva informações para uso futuro
-  localStorage.setItem('googleUserName', userName);
-
-  console.log("Usuário logado:", userName);
-}
-
-
-// Carregar script e inicializar Google Auth
-window.onload = () => {
-  loadGoogleScript(() => {
-    console.log("API Google carregada.");
-    initializeGoogleAuth();
-  });
-};
-
-
-
-    </script>
-    <script>
+        const script = document.createElement('script');
+        script.src = "https://accounts.google.com/gsi/client";
+        script.async = true;
+        script.defer = true;
+        script.onload = callback; // Executa o callback após o script carregar
+        script.onerror = () => console.error("Falha ao carregar a API do Google.");
+        document.head.appendChild(script);
+      }
+    
+      function initializeGoogleAuth() {
+        google.accounts.id.initialize({
+          client_id: '623246086163-khqml6lntrh8khrlmpobe5296slbbr3f.apps.googleusercontent.com',
+          callback: handleCredentialResponse,
+        });
+    
+        google.accounts.id.renderButton(
+          document.getElementById('googleLoginButton'),
+          { theme: 'outline', size: 'large' }
+        );
+    
+        console.log("Botão Google renderizado com sucesso.");
+      }
+    
+      function handleCredentialResponse(response) {
+        // Atualiza o nome de usuário e exibe na página
+        const decodedCredential = JSON.parse(atob(response.credential.split('.')[1])); // Decodifica o JWT
+        const userName = decodedCredential.name;
+        document.getElementById('username').innerText = userName;
+    
+        // Salva informações para uso futuro
+        localStorage.setItem('googleUserName', userName);
+    
+        console.log("Usuário logado:", userName);
+    
+        // Carrega o progresso do Google Drive após o login
+        loadProgressFromGoogleDrive();
+      }
+    
+      // Carregar script e inicializar Google Auth
+      window.onload = () => {
+        loadGoogleScript(() => {
+          console.log("API Google carregada.");
+          initializeGoogleAuth();
+        });
+      };
+    
       function saveProgressToGoogleDrive() {
-  const auth = gapi.auth2.getAuthInstance();
-  const user = auth.currentUser.get();
-  const authResponse = user.getAuthResponse();
-
-  const fileContent = JSON.stringify(localStorage); // Dados do progresso
-  const file = new Blob([fileContent], { type: 'application/json' });
-  const metadata = {
-    name: `progresso_leitura_${user.getBasicProfile().getName()}.json`,
-    mimeType: 'application/json',
-    parents: ['appDataFolder'], // Salvar na pasta do app no Drive
-  };
-
-  const accessToken = authResponse.access_token;
-
-  const form = new FormData();
-  form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
-  form.append('file', file);
-
-  fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
-    method: 'POST',
-    headers: new Headers({ Authorization: `Bearer ${accessToken}` }),
-    body: form,
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.id) {
-        // Sucesso no upload
-        alert('Progresso salvo com sucesso no Google Drive!');
-      } else {
-        // Falha inesperada
-        alert('Houve um problema ao salvar o progresso no Google Drive.');
-        console.error('Erro ao salvar no Google Drive:', data);
+        const auth = gapi.auth2.getAuthInstance();
+        const user = auth.currentUser.get();
+        const authResponse = user.getAuthResponse();
+    
+        const fileContent = JSON.stringify(localStorage); // Dados do progresso
+        const file = new Blob([fileContent], { type: 'application/json' });
+        const metadata = {
+          name: `progresso_leitura_${user.getBasicProfile().getName()}.json`,
+          mimeType: 'application/json',
+          parents: ['appDataFolder'], // Salvar na pasta do app no Drive
+        };
+    
+        const accessToken = authResponse.access_token;
+    
+        const form = new FormData();
+        form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+        form.append('file', file);
+    
+        fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+          method: 'POST',
+          headers: new Headers({ Authorization: `Bearer ${accessToken}` }),
+          body: form,
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.id) {
+              // Sucesso no upload
+              alert('Progresso salvo com sucesso no Google Drive!');
+            } else {
+              // Falha inesperada
+              alert('Houve um problema ao salvar o progresso no Google Drive.');
+              console.error('Erro ao salvar no Google Drive:', data);
+            }
+          })
+          .catch((error) => {
+            // Erro na requisição
+            alert('Erro ao salvar no Google Drive. Por favor, tente novamente.');
+            console.error('Erro ao salvar no Google Drive:', error);
+          });
       }
-    })
-    .catch((error) => {
-      // Erro na requisição
-      alert('Erro ao salvar no Google Drive. Por favor, tente novamente.');
-      console.error('Erro ao salvar no Google Drive:', error);
-    });
-}
-
-
-    </script>
-    <script>
-      // Verificação se a API do Google foi carregada
-      if (typeof gapi === "undefined") {
-        console.error("API Google não carregada.");
-      } else {
-        console.log("API Google carregada com sucesso.");
-      }
+    
       function loadProgressFromGoogleDrive() {
         console.log("Iniciando carga do Google Drive...");
-
+    
         gapi.load('client:auth2', () => {
           console.log("Google API carregada, inicializando...");
           gapi.client.init({
@@ -1103,6 +1106,7 @@ window.onload = () => {
         });
       }
     </script>
+    
     
   </body>
 </html>
