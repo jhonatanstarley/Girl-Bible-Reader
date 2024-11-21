@@ -69,55 +69,22 @@
       }
     
       function logoutGoogle() {
-        console.log("Tentando desconectar o usuário...");
-    
-        // Verifica se a API do Google foi carregada
-        if (typeof gapi === "undefined") {
-          console.error("API Google não carregada.");
-          return;
-        }
-    
-        // Verifica se o auth2 foi inicializado
-        const authInstance = gapi.auth2?.getAuthInstance();
-        if (!authInstance) {
-          console.error("Instância de autenticação não encontrada. Inicializando agora...");
-          gapi.load("auth2", () => {
-            gapi.auth2
-              .init({
-                client_id: '623246086163-khqml6lntrh8khrlmpobe5296slbbr3f.apps.googleusercontent.com',
-              })
-              .then((auth) => {
-                console.log("auth2 inicializado. Tentando desconectar...");
-                auth
-                  .signOut()
-                  .then(() => {
-                    console.log("Usuário desconectado após reinicialização.");
-                    document.getElementById("username").innerText = "Visitante";
-                    localStorage.removeItem("username");
-                  })
-                  .catch((error) => {
-                    console.error("Erro ao desconectar o usuário após reinicialização:", error);
-                  });
-              })
-              .catch((error) => {
-                console.error("Erro ao inicializar auth2:", error);
-              });
-          });
-          return;
-        }
-    
-        // Se auth2 já estiver inicializado, realiza o logout diretamente
-        authInstance
-          .signOut()
-          .then(() => {
-            console.log("Usuário desconectado.");
-            document.getElementById("username").innerText = "Visitante";
-            localStorage.removeItem("username");
-          })
-          .catch((error) => {
-            console.error("Erro ao desconectar o usuário:", error);
-          });
-      }
+  console.log("Tentando desconectar o usuário...");
+
+  // Verifica se a API do Google Identity Services está disponível
+  if (typeof google.accounts.id === "undefined") {
+    console.error("API Google Identity Services não carregada.");
+    return;
+  }
+
+  // Executa a função de revogação de token e desconexão
+  google.accounts.id.revoke(localStorage.getItem("googleUserName"), () => {
+    console.log("Usuário desconectado.");
+    document.getElementById("username").innerText = "Visitante";
+    localStorage.removeItem("googleUserName"); // Remove informações do localStorage
+  });
+}
+
     </script>
       
     <script src="https://apis.google.com/js/api.js" async defer onload="initializeGapi()"></script>
