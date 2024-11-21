@@ -998,18 +998,22 @@
       }
     
       function handleCredentialResponse(response) {
-        // Atualiza o nome de usuário e exibe na página
-        const decodedCredential = JSON.parse(atob(response.credential.split('.')[1])); // Decodifica o JWT
-        const userName = decodedCredential.name;
-        document.getElementById('username').innerText = userName;
-    
-        // Salva informações para uso futuro
-        localStorage.setItem('googleUserName', userName);
-    
-        console.log("Usuário logado:", userName);
-    
-        // Carrega o progresso do Google Drive após o login
-        loadProgressFromGoogleDrive();
+        try {
+          // Decodifica o JWT recebido do Google Identity Services
+          const decodedCredential = JSON.parse(atob(response.credential.split('.')[1]));
+          const userName = decodedCredential.name || "Usuário";
+
+          // Atualiza o nome do usuário na interface
+          document.getElementById("username").innerText = userName;
+          localStorage.setItem("googleUserName", userName);
+
+          console.log("Usuário logado:", userName);
+
+          // Carrega o progresso do Google Drive após o login
+          loadProgressFromGoogleDrive();
+        } catch (error) {
+          console.error("Erro ao processar as credenciais do Google:", error);
+        }
       }
     
       // Carregar script e inicializar Google Auth
@@ -1064,45 +1068,47 @@
     
       function loadProgressFromGoogleDrive() {
         console.log("Iniciando carga do Google Drive...");
-    
-        gapi.load('client:auth2', () => {
-          console.log("Google API carregada, inicializando...");
-          gapi.client.init({
-            apiKey: 'AIzaSyCy4hndjDWb1-3MLtY-W9ydyB30b_U5XGo',
-            clientId: '623246086163-khqml6lntrh8khrlmpobe5296slbbr3f.apps.googleusercontent.com',
-            discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
-            scope: 'https://www.googleapis.com/auth/drive.appdata',
-          }).then(() => {
-            console.log("Google Drive API inicializada.");
-            return gapi.auth2.getAuthInstance().signIn();
-          }).then(() => {
-            console.log("Usuário autenticado.");
-            return gapi.client.drive.files.list({
-              q: "name contains 'progresso_leitura_' and trashed=false",
-              spaces: 'appDataFolder',
-            });
-          }).then((response) => {
-            console.log("Arquivos encontrados:", response.result.files);
-            const file = response.result.files[0];
-            if (file) {
+
+        gapi.load("client:auth2", () => {
+          gapi.client
+            .init({
+              apiKey: 'AIzaSyCy4hndjDWb1-3MLtY-W9ydyB30b_U5XGo',
+              clientId: '623246086163-khqml6lntrh8khrlmpobe5296slbbr3f.apps.googleusercontent.com',
+              discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"],
+              scope: "https://www.googleapis.com/auth/drive.appdata",
+            })
+            .then(() => {
+              console.log("API Google Drive inicializada.");
+              return gapi.auth2.getAuthInstance().signIn();
+            })
+            .then(() => {
+              return gapi.client.drive.files.list({
+                q: "name contains 'progresso_leitura_' and trashed=false",
+                spaces: "appDataFolder",
+              });
+            })
+            .then((response) => {
+              if (response.result.files.length === 0) {
+                console.log("Nenhum arquivo de progresso encontrado.");
+                return;
+              }
+              const file = response.result.files[0];
               return gapi.client.drive.files.get({
                 fileId: file.id,
-                alt: 'media',
+                alt: "media",
               });
-            } else {
-              console.log("Nenhum arquivo encontrado.");
-            }
-          }).then((fileData) => {
-            if (fileData) {
-              console.log("Arquivo obtido:", fileData);
-              const data = JSON.parse(fileData.body);
-              Object.keys(data).forEach((key) => localStorage.setItem(key, data[key]));
-              console.log("Progresso carregado com sucesso.");
-              location.reload();
-            }
-          }).catch((error) => {
-            console.error("Erro ao carregar Google Drive:", error);
-          });
+            })
+            .then((fileData) => {
+              if (fileData) {
+                const data = JSON.parse(fileData.body);
+                Object.keys(data).forEach((key) => localStorage.setItem(key, data[key]));
+                console.log("Progresso carregado com sucesso.");
+                location.reload(); // Recarrega para refletir as alterações
+              }
+            })
+            .catch((error) => {
+              console.error("Erro ao carregar o progresso do Google Drive:", error);
+            });
         });
       }
     </script>
