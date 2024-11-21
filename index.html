@@ -67,23 +67,42 @@
             });
         });
       }
-    
+
       function logoutGoogle() {
-  console.log("Tentando desconectar o usuário...");
+        console.log("Tentando desconectar o usuário...");
 
-  // Verifica se a API do Google Identity Services está disponível
-  if (typeof google.accounts.id === "undefined") {
-    console.error("API Google Identity Services não carregada.");
-    return;
-  }
+        // Verifica se a API do Google Identity Services está disponível
+        if (typeof google.accounts.id === "undefined") {
+          console.error("API Google Identity Services não carregada.");
+          return;
+        }
 
-  // Executa a função de revogação de token e desconexão
-  google.accounts.id.revoke(localStorage.getItem("googleUserName"), () => {
-    console.log("Usuário desconectado.");
-    document.getElementById("username").innerText = "Visitante";
-    localStorage.removeItem("googleUserName"); // Remove informações do localStorage
-  });
-}
+        // Salva o progresso antes de limpar os dados
+        if (localStorage.getItem("googleUserName")) {
+          saveProgressToGoogleDrive(() => {
+            console.log("Progresso salvo com sucesso antes do logout.");
+            cleanUpAndLogout();
+          });
+        } else {
+          cleanUpAndLogout();
+        }
+      }
+
+      function cleanUpAndLogout() {
+        google.accounts.id.revoke(localStorage.getItem("googleUserName"), () => {
+          console.log("Usuário desconectado.");
+
+          // Limpa todos os dados do localStorage relacionados ao progresso e usuário
+          localStorage.clear();
+
+          // Atualiza a interface para indicar que o usuário foi desconectado
+          document.getElementById("username").innerText = "Visitante";
+
+          // Exibe uma mensagem de confirmação
+          alert("Você foi desconectado e todos os seus dados locais foram limpos.");
+        });
+      }
+
 
     </script>
       
