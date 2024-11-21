@@ -868,7 +868,7 @@
 
       function initializeGoogleAuth() {
         google.accounts.id.initialize({
-          client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID, // Pega do Vercel
+          client_id: `${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}`, // Vercel injeta como global
           callback: handleCredentialResponse,
         });
 
@@ -878,14 +878,17 @@
         );
       }
 
+
+
       function handleCredentialResponse(response) {
+        console.log('Credenciais recebidas:', response);
         google.accounts.id.revoke(response.clientId, () => {
-          console.log('Revogado');
+          console.log('Token revogado');
         });
 
         googleUser = response;
-        document.getElementById('username').innerText = googleUser.name;
-        saveProgressToGoogleDrive();
+        document.getElementById('username').innerText = googleUser.name || 'Visitante';
+        console.log('Usuário autenticado:', googleUser.name);
       }
 
       window.onload = initializeGoogleAuth;
@@ -903,7 +906,7 @@
   const metadata = {
     name: `progresso_leitura_${googleUser.name}.json`,
     mimeType: 'application/json',
-    parents: ['appDataBiblia365'], // Salvar na pasta do app no Drive
+    parents: ['appDataFolder'], // Salvar na pasta do app no Drive
   };
 
   const accessToken = authResponse.access_token;
@@ -925,36 +928,45 @@
     </script>
     <script>
       function loadProgressFromGoogleDrive() {
-  gapi.load('client:auth2', () => {
-    gapi.client.init({
-      apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY, // API Key
-      clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID, // Client ID
-      discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
-      scope: 'https://www.googleapis.com/auth/drive.appdata', // Acesso à pasta de dados do app
-    }).then(() => {
-      gapi.client.drive.files.list({
-        q: "name contains 'progresso_leitura_' and trashed=false",
-        spaces: 'appDataBiblia365', // Pasta reservada para dados do app
-      }).then((response) => {
-        const file = response.result.files[0];
-        if (file) {
-          gapi.client.drive.files.get({
-            fileId: file.id,
-            alt: 'media', // Obtém o conteúdo do arquivo
-          }).then((fileData) => {
-            const data = JSON.parse(fileData.body);
-            Object.keys(data).forEach((key) => localStorage.setItem(key, data[key]));
-            location.reload(); // Atualiza a página
-          });
-        } else {
-          console.log('Nenhum progresso salvo encontrado.');
-        }
-      });
-    }).catch((error) => {
-      console.error('Erro ao inicializar a API do Google Drive:', error);
-    });
-  });
-}
+        gapi.load('client:auth2', () => {
+          gapi.client
+            .init({
+              apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY, // Obtém do Vercel
+              clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID, // Obtém do Vercel
+              discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
+              scope: 'https://www.googleapis.com/auth/drive.appdata', // Escopo para dados do app
+            })
+            .then(() => {
+              console.log('Google API carregada e autenticada');
+              return gapi.client.drive.files.list({
+                q: "name contains 'progresso_leitura_' and trashed=false",
+                spaces: 'appDataFolder', // Espaço padrão para dados do app
+              });
+            })
+            .then((response) => {
+              console.log('Arquivos encontrados no Google Drive:', response.result.files);
+              const file = response.result.files[0];
+              if (file) {
+                return gapi.client.drive.files.get({
+                  fileId: file.id,
+                  alt: 'media', // Obtém o conteúdo do arquivo
+                });
+              } else {
+                console.log('Nenhum arquivo encontrado.');
+                throw new Error('Nenhum arquivo encontrado.');
+              }
+            })
+            .then((fileData) => {
+              const data = JSON.parse(fileData.body);
+              Object.keys(data).forEach((key) => localStorage.setItem(key, data[key]));
+              console.log('Progresso carregado com sucesso.');
+              location.reload(); // Atualiza a página para refletir os dados
+            })
+            .catch((error) => {
+              console.error('Erro ao carregar o progresso do Google Drive:', error);
+            });
+        });
+      }
 
     </script>
     
