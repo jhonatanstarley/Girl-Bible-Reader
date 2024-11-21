@@ -40,17 +40,53 @@
     <link rel="apple-touch-icon" href="/assets/Biblia.512x512.png" sizes="512x512">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script>
-      // Função para inicializar o gapi depois de carregado
+      // Função única para inicializar o GAPI
       function initializeGapi() {
         if (typeof gapi === "undefined") {
           console.error("API Google não carregada.");
-        } else {
-          console.log("API Google carregada com sucesso.");
-          // Inicialize ou chame funções relacionadas ao gapi aqui
-          loadProgressFromGoogleDrive();
+          return;
         }
+    
+        console.log("API Google carregada com sucesso.");
+    
+        gapi.load("client:auth2", () => {
+          gapi.client
+            .init({
+              clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID, // Client ID do ambiente Vercel
+              scope: "https://www.googleapis.com/auth/drive.appdata",
+            })
+            .then(() => {
+              console.log("GAPI inicializado.");
+              loadProgressFromGoogleDrive(); // Função personalizada para carregar progresso
+            })
+            .catch((error) => {
+              console.error("Erro ao inicializar o GAPI:", error);
+            });
+        });
       }
-    </script>
+    
+      // Função de logout
+      function logoutGoogle() {
+        if (typeof gapi === "undefined" || !gapi.auth2) {
+          console.error("API Google não carregada ou auth2 não inicializada.");
+          return;
+        }
+    
+        const authInstance = gapi.auth2.getAuthInstance();
+        if (!authInstance) {
+          console.error("Instância de autenticação não encontrada.");
+          return;
+        }
+    
+        authInstance.signOut().then(() => {
+          console.log("Usuário desconectado.");
+          document.getElementById("username").innerText = "Visitante";
+          localStorage.removeItem("username");
+        }).catch((error) => {
+          console.error("Erro ao desconectar o usuário:", error);
+        });
+      }
+    </script>    
     <script src="https://apis.google.com/js/api.js" async defer onload="initializeGapi()"></script>
     
     
@@ -184,18 +220,18 @@
         
       }
       #googleLoginButton {
-  background-color: #4285f4; /* Cor azul padrão do Google */
-  color: white;
+  background-color: transparent; /* Cor azul padrão do Google */
+  color: transparent;
   border: none;
   padding: 10px 20px;
   border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0);
 }
 
 #googleLoginButton:hover {
-  background-color: #357ae8; /* Cor azul mais escura no hover */
+  background-color: transparent; /* Cor azul mais escura no hover */
 }
 
 #switchAccountButton {
@@ -913,16 +949,6 @@
   script.onerror = () => console.error("Falha ao carregar a API do Google.");
   document.head.appendChild(script);
 }
-
-function logoutGoogle() {
-  const clientId = gapi.auth2.getAuthInstance().currentUser.get().getId();
-  google.accounts.id.revoke(clientId, () => {
-    console.log("Conta revogada com sucesso.");
-    alert("Você saiu da conta Google. Faça login novamente.");
-    initializeGoogleAuth(); // Recarrega o botão de login
-  });
-}
-
 
 function initializeGoogleAuth() {
   google.accounts.id.initialize({
