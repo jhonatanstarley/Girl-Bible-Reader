@@ -38,7 +38,66 @@
     <link rel="apple-touch-icon" href="/assets/Biblia.192x192.png" sizes="192x192">
     <link rel="apple-touch-icon" href="/assets/Biblia.256x256.png" sizes="256x256">
     <link rel="apple-touch-icon" href="/assets/Biblia.512x512.png" sizes="512x512">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    
+    <script>
+      // Função única para inicializar o GAPI
+      function initializeGapi() {
+        console.log("Verificando API do Google...");
+        if (typeof gapi === "undefined") {
+          console.error("API Google não carregada.");
+          return;
+        }
+    
+        console.log("API Google carregada com sucesso.");
+    
+        gapi.load("client:auth2", () => {
+          console.log("Iniciando gapi.client e auth2...");
+          gapi.client
+            .init({
+              clientId: '623246086163-khqml6lntrh8khrlmpobe5296slbbr3f.apps.googleusercontent.com', // Client ID do ambiente Vercel
+              scope: "https://www.googleapis.com/auth/drive.appdata",
+            })
+            .then(() => {
+              console.log("GAPI inicializado.");
+              loadProgressFromGoogleDrive(); // Função para carregar progresso
+            })
+            .catch((error) => {
+              console.error("Erro ao inicializar o GAPI:", error);
+            });
+        });
+      }
 
+      // Função de logout
+function logoutGoogle() {
+  console.log("Tentando desconectar o usuário...");
+
+  // Limpa localStorage e reinicia interface
+  localStorage.removeItem("username");
+  localStorage.setItem("loggedIn", "false");
+
+  document.getElementById("username").innerText = "Visitante";
+  renderGoogleLoginButton();
+  console.log("Usuário desconectado.");
+}
+
+// Executa ao carregar a página
+window.onload = () => {
+  restoreState();
+
+  loadGoogleScript(() => {
+    console.log("API do Google carregada.");
+    initializeGoogleAuth();
+    initializeSwitchAccountButton();
+  });
+};
+
+
+    </script>
+      
+    <script src="https://apis.google.com/js/api.js" async defer onload="initializeGapi()"></script>
+    
+    
 
     <style>
       body {
@@ -168,11 +227,54 @@
         display: none;
         
       }
+      #googleLoginButton {
+  background-color: transparent; /* Cor azul padrão do Google */
+  color: transparent;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0);
+}
+
+#googleLoginButton:hover {
+  background-color: transparent; /* Cor azul mais escura no hover */
+}
+
+#switchAccountButton {
+  background-color: #f44336; /* Vermelho para diferenciar do botão de login */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#switchAccountButton:hover {
+  background-color: #d32f2f; /* Vermelho mais escuro no hover */
+}
+
+.auth-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Espaçamento entre os botões */
+  position: absolute;
+  top: 10px; /* Distância do topo */
+  right: 113px; /* Distância da lateral direita */
+}
+
     </style>
   </head>
 
   <body>
     <div class="container mt-5">
+      <div class="auth-buttons">
+        <button id="googleLoginButton">Logar com Google</button>
+        <button id="switchAccountButton" onclick="logoutGoogle()">Trocar Conta</button>
+      </div><br>      
       <div class="header">
         <h1 class="text-center">Programação de Leitura da Bíblia em 1 Ano</h1>
         <h3 class="text-right" id="username"></h3>
@@ -843,6 +945,205 @@
         });
       }
     </script>
+    <script>
+      let googleUser;
+    
+      function loadGoogleScript(callback) {
+        const script = document.createElement('script');
+        script.src = "https://accounts.google.com/gsi/client";
+        script.async = true;
+        script.defer = true;
+        script.onload = callback; // Executa o callback após o script carregar
+        script.onerror = () => console.error("Falha ao carregar a API do Google.");
+        document.head.appendChild(script);
+      }
+    
+      function initializeGoogleAuth() {
+        google.accounts.id.initialize({
+          client_id: '623246086163-khqml6lntrh8khrlmpobe5296slbbr3f.apps.googleusercontent.com',
+          callback: handleCredentialResponse,
+        });
+    
+        google.accounts.id.renderButton(
+          document.getElementById('googleLoginButton'),
+          { theme: 'outline', size: 'large' }
+        );
+    
+        console.log("Botão Google renderizado com sucesso.");
+      }
+    
+      // Armazena o nome do usuário após login
+function handleCredentialResponse(response) {
+  const decodedCredential = JSON.parse(atob(response.credential.split('.')[1])); // Decodifica o JWT
+  const userName = decodedCredential.name;
+
+  // Atualiza o nome na interface
+  document.getElementById("username").innerText = userName;
+
+  // Armazena no localStorage
+  localStorage.setItem("username", userName);
+  localStorage.setItem("loggedIn", "true");
+
+  console.log("Usuário logado:", userName);
+
+  // Carrega progresso do Google Drive
+  loadProgressFromGoogleDrive();
+}
+
+// Restaura o estado ao carregar a página
+function restoreState() {
+  const userName = localStorage.getItem("username");
+  const loggedIn = localStorage.getItem("loggedIn") === "true";
+
+  if (loggedIn && userName) {
+    // Se já estiver logado, restaura o estado
+    document.getElementById("username").innerText = userName;
+    console.log("Usuário restaurado:", userName);
+  } else {
+    // Usuário não logado
+    console.log("Nenhum usuário logado. Exibindo botão de login.");
+    renderGoogleLoginButton();
+  }
+}
+
+// Renderiza o botão de login do Google
+function renderGoogleLoginButton() {
+  google.accounts.id.renderButton(
+    document.getElementById("googleLoginButton"),
+    { theme: "outline", size: "large" }
+  );
+  console.log("Botão de login do Google renderizado.");
+}
+
+// Inicializa o botão de troca de conta
+function initializeSwitchAccountButton() {
+  const switchAccountButton = document.getElementById("switchAccountButton");
+
+  if (switchAccountButton) {
+    switchAccountButton.style.display = "inline-block"; // Torna visível
+    switchAccountButton.onclick = logoutGoogle; // Define a função de logout
+  }
+}
+    
+      // Carregar script e inicializar Google Auth
+      window.onload = () => {
+        loadGoogleScript(() => {
+          console.log("API Google carregada.");
+          initializeGoogleAuth();
+        });
+      };
+    
+      function saveProgressToGoogleDrive() {
+  const auth = gapi.auth2.getAuthInstance();
+  const user = auth.currentUser.get();
+  const authResponse = user.getAuthResponse();
+
+  const fileContent = JSON.stringify(localStorage); // Dados do progresso
+  const file = new Blob([fileContent], { type: 'application/json' });
+  const metadata = {
+    name: `progresso_leitura_${user.getBasicProfile().getName()}.json`,
+    mimeType: 'application/json',
+    parents: ['appDataFolder'], // Salvar na pasta do app no Drive
+  };
+
+  const accessToken = authResponse.access_token;
+
+  // Verifica se o arquivo já existe antes de salvar
+  gapi.client.drive.files
+    .list({
+      q: `name='progresso_leitura_${user.getBasicProfile().getName()}.json' and trashed=false`,
+      spaces: 'appDataFolder',
+    })
+    .then((response) => {
+      const existingFile = response.result.files[0]; // Obtém o primeiro arquivo com o nome
+      if (existingFile) {
+        // Se o arquivo já existir, atualiza o conteúdo
+        return fetch(`https://www.googleapis.com/upload/drive/v3/files/${existingFile.id}?uploadType=multipart`, {
+          method: 'PATCH',
+          headers: new Headers({ Authorization: `Bearer ${accessToken}` }),
+          body: createFormData(metadata, file),
+        });
+      } else {
+        // Caso contrário, cria um novo arquivo
+        return fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+          method: 'POST',
+          headers: new Headers({ Authorization: `Bearer ${accessToken}` }),
+          body: createFormData(metadata, file),
+        });
+      }
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.id) {
+        alert('Progresso salvo com sucesso no Google Drive!');
+        console.log('Progresso salvo:', data);
+      } else {
+        alert('Houve um problema ao salvar o progresso no Google Drive.');
+        console.error('Erro ao salvar no Google Drive:', data);
+      }
+    })
+    .catch((error) => {
+      alert('Erro ao salvar no Google Drive. Por favor, tente novamente.');
+      console.error('Erro ao salvar no Google Drive:', error);
+    });
+}
+
+// Função auxiliar para criar o FormData
+function createFormData(metadata, file) {
+  const form = new FormData();
+  form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+  form.append('file', file);
+  return form;
+}
+
+    
+      function loadProgressFromGoogleDrive() {
+        console.log("Iniciando carga do Google Drive...");
+
+        gapi.load("client:auth2", () => {
+          gapi.client
+            .init({
+              apiKey: 'AIzaSyCy4hndjDWb1-3MLtY-W9ydyB30b_U5XGo',
+              clientId: '623246086163-khqml6lntrh8khrlmpobe5296slbbr3f.apps.googleusercontent.com',
+              discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"],
+              scope: "https://www.googleapis.com/auth/drive.appdata",
+            })
+            .then(() => {
+              console.log("API Google Drive inicializada.");
+              return gapi.auth2.getAuthInstance().signIn();
+            })
+            .then(() => {
+              return gapi.client.drive.files.list({
+                q: "name contains 'progresso_leitura_' and trashed=false",
+                spaces: "appDataFolder",
+              });
+            })
+            .then((response) => {
+              if (response.result.files.length === 0) {
+                console.log("Nenhum arquivo de progresso encontrado.");
+                return;
+              }
+              const file = response.result.files[0];
+              return gapi.client.drive.files.get({
+                fileId: file.id,
+                alt: "media",
+              });
+            })
+            .then((fileData) => {
+              if (fileData) {
+                const data = JSON.parse(fileData.body);
+                Object.keys(data).forEach((key) => localStorage.setItem(key, data[key]));
+                console.log("Progresso carregado com sucesso.");
+                location.reload(); // Recarrega para refletir as alterações
+              }
+            })
+            .catch((error) => {
+              console.error("Erro ao carregar o progresso do Google Drive:", error);
+            });
+        });
+      }
+    </script>
+    
     
   </body>
 </html>
