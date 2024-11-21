@@ -39,7 +39,8 @@
     <link rel="apple-touch-icon" href="/assets/Biblia.256x256.png" sizes="256x256">
     <link rel="apple-touch-icon" href="/assets/Biblia.512x512.png" sizes="512x512">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script src="https://apis.google.com/js/api.js"></script>
+    <script src="https://apis.google.com/js/api.js" async defer></script>
+
     
 
     <style>
@@ -927,47 +928,57 @@
 
     </script>
     <script>
+      // Verificação se a API do Google foi carregada
+      if (typeof gapi === "undefined") {
+        console.error("API Google não carregada.");
+      } else {
+        console.log("API Google carregada com sucesso.");
+      }
       function loadProgressFromGoogleDrive() {
+        console.log("Iniciando carga do Google Drive...");
+        console.log("API Key:", process.env.NEXT_PUBLIC_GOOGLE_API_KEY);
+        console.log("Client ID:", process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID);
+
         gapi.load('client:auth2', () => {
-          gapi.client
-            .init({
-              apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY, // Obtém do Vercel
-              clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID, // Obtém do Vercel
-              discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
-              scope: 'https://www.googleapis.com/auth/drive.appdata', // Escopo para dados do app
-            })
-            .then(() => {
-              console.log('Google API carregada e autenticada');
-              return gapi.client.drive.files.list({
-                q: "name contains 'progresso_leitura_' and trashed=false",
-                spaces: 'appDataFolder', // Espaço padrão para dados do app
+          console.log("Google API carregada, inicializando...");
+          gapi.client.init({
+            apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
+            clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+            discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
+            scope: 'https://www.googleapis.com/auth/drive.appdata',
+          }).then(() => {
+            console.log("Google Drive API inicializada.");
+            return gapi.auth2.getAuthInstance().signIn();
+          }).then(() => {
+            console.log("Usuário autenticado.");
+            return gapi.client.drive.files.list({
+              q: "name contains 'progresso_leitura_' and trashed=false",
+              spaces: 'appDataFolder',
+            });
+          }).then((response) => {
+            console.log("Arquivos encontrados:", response.result.files);
+            const file = response.result.files[0];
+            if (file) {
+              return gapi.client.drive.files.get({
+                fileId: file.id,
+                alt: 'media',
               });
-            })
-            .then((response) => {
-              console.log('Arquivos encontrados no Google Drive:', response.result.files);
-              const file = response.result.files[0];
-              if (file) {
-                return gapi.client.drive.files.get({
-                  fileId: file.id,
-                  alt: 'media', // Obtém o conteúdo do arquivo
-                });
-              } else {
-                console.log('Nenhum arquivo encontrado.');
-                throw new Error('Nenhum arquivo encontrado.');
-              }
-            })
-            .then((fileData) => {
+            } else {
+              console.log("Nenhum arquivo encontrado.");
+            }
+          }).then((fileData) => {
+            if (fileData) {
+              console.log("Arquivo obtido:", fileData);
               const data = JSON.parse(fileData.body);
               Object.keys(data).forEach((key) => localStorage.setItem(key, data[key]));
-              console.log('Progresso carregado com sucesso.');
-              location.reload(); // Atualiza a página para refletir os dados
-            })
-            .catch((error) => {
-              console.error('Erro ao carregar o progresso do Google Drive:', error);
-            });
+              console.log("Progresso carregado com sucesso.");
+              location.reload();
+            }
+          }).catch((error) => {
+            console.error("Erro ao carregar Google Drive:", error);
+          });
         });
       }
-
     </script>
     
   </body>
