@@ -68,40 +68,29 @@
         });
       }
 
-      function logoutGoogle() {
-        console.log("Tentando desconectar o usuário...");
+      // Função de logout
+function logoutGoogle() {
+  console.log("Tentando desconectar o usuário...");
 
-        // Verifica se a API do Google Identity Services está disponível
-        if (typeof google.accounts.id === "undefined") {
-          console.error("API Google Identity Services não carregada.");
-          return;
-        }
+  // Limpa localStorage e reinicia interface
+  localStorage.removeItem("username");
+  localStorage.setItem("loggedIn", "false");
 
-        // Salva o progresso antes de limpar os dados
-        if (localStorage.getItem("googleUserName")) {
-          saveProgressToGoogleDrive(() => {
-            console.log("Progresso salvo com sucesso antes do logout.");
-            cleanUpAndLogout();
-          });
-        } else {
-          cleanUpAndLogout();
-        }
-      }
+  document.getElementById("username").innerText = "Visitante";
+  renderGoogleLoginButton();
+  console.log("Usuário desconectado.");
+}
 
-      function cleanUpAndLogout() {
-        google.accounts.id.revoke(localStorage.getItem("googleUserName"), () => {
-          console.log("Usuário desconectado.");
+// Executa ao carregar a página
+window.onload = () => {
+  restoreState();
 
-          // Limpa todos os dados do localStorage relacionados ao progresso e usuário
-          localStorage.clear();
-
-          // Atualiza a interface para indicar que o usuário foi desconectado
-          document.getElementById("username").innerText = "Visitante";
-
-          // Exibe uma mensagem de confirmação
-          alert("Você foi desconectado e todos os seus dados locais foram limpos.");
-        });
-      }
+  loadGoogleScript(() => {
+    console.log("API do Google carregada.");
+    initializeGoogleAuth();
+    initializeSwitchAccountButton();
+  });
+};
 
 
     </script>
@@ -983,24 +972,58 @@
         console.log("Botão Google renderizado com sucesso.");
       }
     
-      function handleCredentialResponse(response) {
-        try {
-          // Decodifica o JWT recebido do Google Identity Services
-          const decodedCredential = JSON.parse(atob(response.credential.split('.')[1]));
-          const userName = decodedCredential.name || "Usuário";
+      // Armazena o nome do usuário após login
+function handleCredentialResponse(response) {
+  const decodedCredential = JSON.parse(atob(response.credential.split('.')[1])); // Decodifica o JWT
+  const userName = decodedCredential.name;
 
-          // Atualiza o nome do usuário na interface
-          document.getElementById("username").innerText = userName;
-          localStorage.setItem("googleUserName", userName);
+  // Atualiza o nome na interface
+  document.getElementById("username").innerText = userName;
 
-          console.log("Usuário logado:", userName);
+  // Armazena no localStorage
+  localStorage.setItem("username", userName);
+  localStorage.setItem("loggedIn", "true");
 
-          // Carrega o progresso do Google Drive após o login
-          loadProgressFromGoogleDrive();
-        } catch (error) {
-          console.error("Erro ao processar as credenciais do Google:", error);
-        }
-      }
+  console.log("Usuário logado:", userName);
+
+  // Carrega progresso do Google Drive
+  loadProgressFromGoogleDrive();
+}
+
+// Restaura o estado ao carregar a página
+function restoreState() {
+  const userName = localStorage.getItem("username");
+  const loggedIn = localStorage.getItem("loggedIn") === "true";
+
+  if (loggedIn && userName) {
+    // Se já estiver logado, restaura o estado
+    document.getElementById("username").innerText = userName;
+    console.log("Usuário restaurado:", userName);
+  } else {
+    // Usuário não logado
+    console.log("Nenhum usuário logado. Exibindo botão de login.");
+    renderGoogleLoginButton();
+  }
+}
+
+// Renderiza o botão de login do Google
+function renderGoogleLoginButton() {
+  google.accounts.id.renderButton(
+    document.getElementById("googleLoginButton"),
+    { theme: "outline", size: "large" }
+  );
+  console.log("Botão de login do Google renderizado.");
+}
+
+// Inicializa o botão de troca de conta
+function initializeSwitchAccountButton() {
+  const switchAccountButton = document.getElementById("switchAccountButton");
+
+  if (switchAccountButton) {
+    switchAccountButton.style.display = "inline-block"; // Torna visível
+    switchAccountButton.onclick = logoutGoogle; // Define a função de logout
+  }
+}
     
       // Carregar script e inicializar Google Auth
       window.onload = () => {
