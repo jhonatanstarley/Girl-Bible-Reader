@@ -39,8 +39,20 @@
     <link rel="apple-touch-icon" href="/assets/Biblia.256x256.png" sizes="256x256">
     <link rel="apple-touch-icon" href="/assets/Biblia.512x512.png" sizes="512x512">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script src="https://apis.google.com/js/api.js" async defer></script>
-
+    <script>
+      // Função para inicializar o gapi depois de carregado
+      function initializeGapi() {
+        if (typeof gapi === "undefined") {
+          console.error("API Google não carregada.");
+        } else {
+          console.log("API Google carregada com sucesso.");
+          // Inicialize ou chame funções relacionadas ao gapi aqui
+          loadProgressFromGoogleDrive();
+        }
+      }
+    </script>
+    <script src="https://apis.google.com/js/api.js" async defer onload="initializeGapi()"></script>
+    
     
 
     <style>
