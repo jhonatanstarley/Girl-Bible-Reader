@@ -879,32 +879,43 @@
     <script>
       let googleUser;
 
-      function initializeGoogleAuth() {
-        google.accounts.id.initialize({
-          client_id: `${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}`, // Vercel injeta como global
-          callback: handleCredentialResponse,
-        });
+      function loadGoogleScript(callback) {
+  const script = document.createElement('script');
+  script.src = "https://accounts.google.com/gsi/client";
+  script.async = true;
+  script.defer = true;
+  script.onload = callback; // Executa o callback após o script carregar
+  script.onerror = () => console.error("Falha ao carregar a API do Google.");
+  document.head.appendChild(script);
+}
 
-        google.accounts.id.renderButton(
-          document.getElementById('googleLoginButton'),
-          { theme: 'outline', size: 'large' }
-        );
-      }
+function initializeGoogleAuth() {
+  google.accounts.id.initialize({
+    client_id: '623246086163-khqml6lntrh8khrlmpobe5296slbbr3f.apps.googleusercontent.com',
+    callback: handleCredentialResponse,
+  });
 
+  google.accounts.id.renderButton(
+    document.getElementById('googleLoginButton'),
+    { theme: 'outline', size: 'large' }
+  );
 
+  console.log("Botão Google renderizado com sucesso.");
+}
 
-      function handleCredentialResponse(response) {
-        console.log('Credenciais recebidas:', response);
-        google.accounts.id.revoke(response.clientId, () => {
-          console.log('Token revogado');
-        });
+function handleCredentialResponse(response) {
+  console.log("Resposta recebida do Google:", response);
+  document.getElementById('username').innerText = response.name || 'Usuário';
+}
 
-        googleUser = response;
-        document.getElementById('username').innerText = googleUser.name || 'Visitante';
-        console.log('Usuário autenticado:', googleUser.name);
-      }
+// Carregar script e inicializar Google Auth
+window.onload = () => {
+  loadGoogleScript(() => {
+    console.log("API Google carregada.");
+    initializeGoogleAuth();
+  });
+};
 
-      window.onload = initializeGoogleAuth;
 
 
     </script>
