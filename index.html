@@ -1011,46 +1011,68 @@
       };
     
       function saveProgressToGoogleDrive() {
-        const auth = gapi.auth2.getAuthInstance();
-        const user = auth.currentUser.get();
-        const authResponse = user.getAuthResponse();
-    
-        const fileContent = JSON.stringify(localStorage); // Dados do progresso
-        const file = new Blob([fileContent], { type: 'application/json' });
-        const metadata = {
-          name: `progresso_leitura_${user.getBasicProfile().getName()}.json`,
-          mimeType: 'application/json',
-          parents: ['appDataFolder'], // Salvar na pasta do app no Drive
-        };
-    
-        const accessToken = authResponse.access_token;
-    
-        const form = new FormData();
-        form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
-        form.append('file', file);
-    
-        fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+  const auth = gapi.auth2.getAuthInstance();
+  const user = auth.currentUser.get();
+  const authResponse = user.getAuthResponse();
+
+  const fileContent = JSON.stringify(localStorage); // Dados do progresso
+  const file = new Blob([fileContent], { type: 'application/json' });
+  const metadata = {
+    name: `progresso_leitura_${user.getBasicProfile().getName()}.json`,
+    mimeType: 'application/json',
+    parents: ['appDataFolder'], // Salvar na pasta do app no Drive
+  };
+
+  const accessToken = authResponse.access_token;
+
+  // Verifica se o arquivo já existe antes de salvar
+  gapi.client.drive.files
+    .list({
+      q: `name='progresso_leitura_${user.getBasicProfile().getName()}.json' and trashed=false`,
+      spaces: 'appDataFolder',
+    })
+    .then((response) => {
+      const existingFile = response.result.files[0]; // Obtém o primeiro arquivo com o nome
+      if (existingFile) {
+        // Se o arquivo já existir, atualiza o conteúdo
+        return fetch(`https://www.googleapis.com/upload/drive/v3/files/${existingFile.id}?uploadType=multipart`, {
+          method: 'PATCH',
+          headers: new Headers({ Authorization: `Bearer ${accessToken}` }),
+          body: createFormData(metadata, file),
+        });
+      } else {
+        // Caso contrário, cria um novo arquivo
+        return fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
           method: 'POST',
           headers: new Headers({ Authorization: `Bearer ${accessToken}` }),
-          body: form,
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            if (data.id) {
-              // Sucesso no upload
-              alert('Progresso salvo com sucesso no Google Drive!');
-            } else {
-              // Falha inesperada
-              alert('Houve um problema ao salvar o progresso no Google Drive.');
-              console.error('Erro ao salvar no Google Drive:', data);
-            }
-          })
-          .catch((error) => {
-            // Erro na requisição
-            alert('Erro ao salvar no Google Drive. Por favor, tente novamente.');
-            console.error('Erro ao salvar no Google Drive:', error);
-          });
+          body: createFormData(metadata, file),
+        });
       }
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.id) {
+        alert('Progresso salvo com sucesso no Google Drive!');
+        console.log('Progresso salvo:', data);
+      } else {
+        alert('Houve um problema ao salvar o progresso no Google Drive.');
+        console.error('Erro ao salvar no Google Drive:', data);
+      }
+    })
+    .catch((error) => {
+      alert('Erro ao salvar no Google Drive. Por favor, tente novamente.');
+      console.error('Erro ao salvar no Google Drive:', error);
+    });
+}
+
+// Função auxiliar para criar o FormData
+function createFormData(metadata, file) {
+  const form = new FormData();
+  form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+  form.append('file', file);
+  return form;
+}
+
     
       function loadProgressFromGoogleDrive() {
         console.log("Iniciando carga do Google Drive...");
