@@ -38,7 +38,9 @@
     <link rel="apple-touch-icon" href="/assets/Biblia.192x192.png" sizes="192x192">
     <link rel="apple-touch-icon" href="/assets/Biblia.256x256.png" sizes="256x256">
     <link rel="apple-touch-icon" href="/assets/Biblia.512x512.png" sizes="512x512">
-
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://apis.google.com/js/api.js"></script>
+    
 
     <style>
       body {
@@ -168,6 +170,23 @@
         display: none;
         
       }
+      #googleLoginButton {
+        position: absolute;
+        top: 10px; /* Distância do topo */
+        right: 20px; /* Distância da lateral direita */
+        background-color: #4285f4; /* Cor azul padrão do Google */
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      #googleLoginButton:hover {
+        background-color: #357ae8; /* Cor azul mais escura no hover */
+      }
     </style>
   </head>
 
@@ -176,6 +195,7 @@
       <div class="header">
         <h1 class="text-center">Programação de Leitura da Bíblia em 1 Ano</h1>
         <h3 class="text-right" id="username"></h3>
+        <button id="googleLoginButton">Logar com Google</button>
         <button type="button" id="button" name="button" class="floating-button" onclick="changeUserName()">✎</button>
         <a
           href="https://api.whatsapp.com/send/?phone=5522997818598&text=Ol%C3%A1%21%0A%0ATenho%20uma%20sugest%C3%A3o%20para%20o%20programa%20de%20leitura%20da%20biblia%20em%201%20ano.%0AT%C3%A1%20podendo%20falar%3F&type=phone_number&app_absent=0"
@@ -842,6 +862,100 @@
           console.log('Erro ao registrar o Service Worker:', err);
         });
       }
+    </script>
+    <script>
+      let googleUser;
+
+      function initializeGoogleAuth() {
+        google.accounts.id.initialize({
+          client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID, // Pega do Vercel
+          callback: handleCredentialResponse,
+        });
+
+        google.accounts.id.renderButton(
+          document.getElementById('googleLoginButton'),
+          { theme: 'outline', size: 'large' }
+        );
+      }
+
+      function handleCredentialResponse(response) {
+        google.accounts.id.revoke(response.clientId, () => {
+          console.log('Revogado');
+        });
+
+        googleUser = response;
+        document.getElementById('username').innerText = googleUser.name;
+        saveProgressToGoogleDrive();
+      }
+
+      window.onload = initializeGoogleAuth;
+
+
+    </script>
+    <script>
+      function saveProgressToGoogleDrive() {
+  const auth = gapi.auth2.getAuthInstance();
+  const user = auth.currentUser.get();
+  const authResponse = user.getAuthResponse();
+
+  const fileContent = JSON.stringify(localStorage); // Dados do progresso
+  const file = new Blob([fileContent], { type: 'application/json' });
+  const metadata = {
+    name: `progresso_leitura_${googleUser.name}.json`,
+    mimeType: 'application/json',
+    parents: ['appDataBiblia365'], // Salvar na pasta do app no Drive
+  };
+
+  const accessToken = authResponse.access_token;
+
+  const form = new FormData();
+  form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+  form.append('file', file);
+
+  fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+    method: 'POST',
+    headers: new Headers({ Authorization: `Bearer ${accessToken}` }),
+    body: form,
+  })
+    .then((res) => res.json())
+    .then((data) => console.log('Arquivo salvo:', data))
+    .catch((error) => console.error('Erro ao salvar no Google Drive:', error));
+}
+
+    </script>
+    <script>
+      function loadProgressFromGoogleDrive() {
+  gapi.load('client:auth2', () => {
+    gapi.client.init({
+      apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY, // API Key
+      clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID, // Client ID
+      discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
+      scope: 'https://www.googleapis.com/auth/drive.appdata', // Acesso à pasta de dados do app
+    }).then(() => {
+      gapi.client.drive.files.list({
+        q: "name contains 'progresso_leitura_' and trashed=false",
+        spaces: 'appDataBiblia365', // Pasta reservada para dados do app
+      }).then((response) => {
+        const file = response.result.files[0];
+        if (file) {
+          gapi.client.drive.files.get({
+            fileId: file.id,
+            alt: 'media', // Obtém o conteúdo do arquivo
+          }).then((fileData) => {
+            const data = JSON.parse(fileData.body);
+            Object.keys(data).forEach((key) => localStorage.setItem(key, data[key]));
+            location.reload(); // Atualiza a página
+          });
+        } else {
+          console.log('Nenhum progresso salvo encontrado.');
+        }
+      });
+    }).catch((error) => {
+      console.error('Erro ao inicializar a API do Google Drive:', error);
+    });
+  });
+}
+
     </script>
     
   </body>
