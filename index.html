@@ -1068,8 +1068,8 @@
         gapi.load('client:auth2', () => {
           console.log("Google API carregada, inicializando...");
           gapi.client.init({
-            apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
-            clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+            apiKey: 'AIzaSyCy4hndjDWb1-3MLtY-W9ydyB30b_U5XGo',
+            clientId: '623246086163-khqml6lntrh8khrlmpobe5296slbbr3f.apps.googleusercontent.com',
             discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'],
             scope: 'https://www.googleapis.com/auth/drive.appdata',
           }).then(() => {
