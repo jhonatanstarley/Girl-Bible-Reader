@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --header-overlay: linear-gradient(180deg, rgba(15, 23, 42, 0.15) 0%, rgba(15, 23, 42, 0.65) 100%);
+  color-scheme: light;
+}
+
+.dark {
+  color-scheme: dark;
+}
+
+html,
+body {
+  font-family: theme("fontFamily.body");
+}
+
+/* Foco visível consistente para navegação por teclado (a11y) */
+:focus-visible {
+  outline: 3px solid theme("colors.brand.500");
+  outline-offset: 2px;
+  border-radius: 0.5rem;
+}
+
+/* Reduz movimento para quem prefere (a11y) */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Escala de fonte controlada pelo usuário (acessibilidade de leitura) */
+[data-font-scale="grande"] {
+  font-size: 1.0625rem;
+}
+[data-font-scale="extra-grande"] {
+  font-size: 1.1875rem;
+}
+
+::selection {
+  background-color: theme("colors.brand.300");
+  color: theme("colors.brand.900");
+}
+
+/* <details> nativo usado nas categorias do plano — remove marcador padrão do navegador
+   para trocarmos por um ícone controlado no componente. */
+summary {
+  list-style: none;
+}
+summary::-webkit-details-marker {
+  display: none;
+}
