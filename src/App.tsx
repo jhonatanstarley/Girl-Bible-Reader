@@ -50,6 +50,9 @@ export default function App() {
         onCycleFontScale={cycleScale}
       />
 
+      <br />
+      <br />
+
       <main id="conteudo" className="px-4">
         <ProgressSummary
           progressPercent={stats.progressPercent}
